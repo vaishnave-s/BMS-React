@@ -1,5 +1,5 @@
 import React from 'react';
-import Movies from './Movies';
+import MovieComponent from './MovieComponent';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -35,6 +35,7 @@ function Copyright() {
     </Typography>
   );
 }
+
 
 const drawerWidth = 240;
 
@@ -125,6 +126,10 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
+  InnerComponent: {
+    paddingTop: theme.spacing(10),
+
+  },
 }));
 
 export default function Dashboard() {
@@ -181,8 +186,9 @@ export default function Dashboard() {
         {/* <Divider /> */}
         {/* <List>{secondaryListItems}</List> */}
       </Drawer>
-      <Movies/>
-      
+      <span className={classes.InnerComponent}>
+      <MovieComponent />
+      </span>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
       </main>

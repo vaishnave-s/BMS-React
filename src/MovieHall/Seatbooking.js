@@ -6,20 +6,28 @@ class Seatbooking extends React.Component {
   constructor() {
     super();
     this.state = {
-      seat: [
-        'A1','A2','A3','A4','A5','A6',
-        'B1','B2','B3','B4','B5','B6',
-        'C1','C2','C3','C4','C5','C6'
-      ],
-      seatAvailable: [
-        'A1','A2','A3','A4','A5','A6',
-        'B1','B2','B3','B4','B5','B6'
-        
-      ],
+      seat: [],
+      seatAvailable: [],
       seatSelected: [],
-      seatReserved: ['C1','C2','C3','C4','C5','C6']
+      seatReserved: []
     }
   }
+  componentDidMount(){
+//     console.log("helo")
+  //  axios.get("https://localhost:44343/api/seats/"+string(this.props.ID))
+  //      .then(response => {
+  //          // console.log(response.data);
+  //          // seats(response.data);
+  //          this.setState({seat:response.data.seats});
+  //          this.setState({shows:response.data.seatsReserved});
+  //          console.log(response.data)
+
+  //      })
+  //      .catch(error=>{
+  //          error.log(error);
+  //      })
+
+}
 
   onClickData(seat) {
     if(this.state.seatSelected.indexOf(seat) > -1 ) {

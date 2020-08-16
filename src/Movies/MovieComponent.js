@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './Movies.css';
 import axios from 'axios';
 import AppBar from '@material-ui/core/AppBar';
+import Modal from "@material-ui/core/Modal";
 import Button from '@material-ui/core/Button';
 import CameraIcon from '@material-ui/icons/PhotoCamera';
 import Card from '@material-ui/core/Card';
@@ -18,7 +19,10 @@ import Link from '@material-ui/core/Link';
 class MovieComponent extends Component {
     constructor(props) {  
         super(props);  
-        this.state = {movies: []};  
+        this.state = {
+          open: false,
+          ID: null,
+          movies: []};  
       }  
 
      componentDidMount(){
@@ -36,6 +40,15 @@ class MovieComponent extends Component {
             })
 
     }
+    handleOpen = ID => () => {
+      // get which button was pressed via `stationNumber`
+      // open the modal and set the `stationNumber` state to that argument
+      this.setState({ open: true, ID: ID });
+    };
+  
+    handleClose = () => {
+      this.setState({ open: false });
+    };
 
   render() {
     return (
@@ -67,13 +80,43 @@ class MovieComponent extends Component {
             </Typography> */}
           </CardContent>
           <CardActions>
-            <Button size="small" color="primary">
+            <Button size="small" color="primary" onClick={this.handleOpen(movie.ID)}>
               View
             </Button>
-            {/* <MoviesModal/> */}
-            {/* <Button size="small" color="primary">
-              Edit
-            </Button> */}
+            <Modal disableScrollLock open={this.state.open} onClose={this.handleClose}>
+            {/* display the content based on newly set state */}
+            <div className="modal">
+              {/* {this.state.movies.forEach(m => m.ID == this.state.ID).Name} */}
+              {this.state.movies.filter(m => m.ID == this.state.ID).map((m)=>
+              (
+                <div>
+                <img className="modalImage" src={m.PosterURL!==null?(m.PosterURL):'https://images.unsplash.com/photo-1478720568477-152d9b164e26?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80'} >
+                  
+                </img>
+                <Typography gutterBottom variant="h4" component="h2">
+              {m.Name}
+            </Typography>
+            <Typography style={{fontSize:14,paddingBottom:10}}>
+              {/* Cast : <div style={{display:'inline'}}>{movie.Cast.map((actor,index) => (<div style={{display:'inline'}}>{actor.ActorName}</div>))}</div> */}
+              Cast : <div style={{display:'inline'}}>{m.Cast.map((actor,aindex) => (<span key={`${aindex}`}>{ (aindex ? ', ' : '') + actor.ActorName }</span>))}</div>
+            </Typography>
+            <Typography style={{fontSize:14,paddingBottom:10}}>
+            Director : {m.Director}
+            </Typography>
+            <Typography style={{fontSize:14,paddingBottom:10}}>
+            Genre : {m.Genre}
+            </Typography>
+            <Typography style={{fontSize:12,paddingBottom:10}}>
+            {m.Synopsis}
+            </Typography>
+            <Typography style={{fontSize:12,paddingBottom:10}}>
+            {m.TrailerURL!==null?(<a target="popup" href={m.TrailerURL}>Watch trailer here</a>):''}
+            </Typography>
+                </div>
+                )
+              )}
+              </div>
+          </Modal>
           </CardActions>
         </Card>
       </Grid>

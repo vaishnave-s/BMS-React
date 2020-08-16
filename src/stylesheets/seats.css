@@ -13,7 +13,7 @@ h1 {
 .grid td {
   width: 80px;
   height: 50px;
-  border: 2px solid orange;
+  border: 2px solid black;
   text-align: center;
   float: left;
   margin: 5px;
@@ -37,14 +37,17 @@ h1 {
 }
 
 .reserved::after {
-  content: 'RESERVED'
+  content: 'RESERVED';
+  font-size: 14px;
 }
 
 .selected::after {
+  font-size: 14px;
   content: 'SELECTED'
 }
 
 .available::after {
+  font-size: 14px;
   content: 'AVAILABLE'
 }
 

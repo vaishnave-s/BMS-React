@@ -11,7 +11,6 @@ export class MovieHall extends Component {
 
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
     //   hallSeat: "",
     //   movie: "",
@@ -34,20 +33,24 @@ export class MovieHall extends Component {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
-    this.setState({
+
+    name=="date"?(this.setState({
       [name]: value,
       book:false,
-    });
+      displayShows:false
+    })):(this.setState({
+      [name]: value,
+      book:false,
+    }));
 
   }
   handleDisplayShows= (event) =>{
-
+    console.log(this.state.date);
     event.preventDefault();
     this.setState({displayShows:true});
-    // console.log("helo")
    axios.get("https://localhost:44343/api/show", {
     params: {
-        MovieID:1,
+        MovieID:parseInt(this.props.path.substring(this.props.path.lastIndexOf('/') + 1)),
         RequestedDate: this.state.date
       }
     })
@@ -60,7 +63,10 @@ export class MovieHall extends Component {
        })
        .catch( error=>{
            console.log('error', error)
-
+            if(error){
+           error.response.status==400?alert("There are no shows for this date."):null;
+           window.location.reload(true); 
+            }
 
        })
 

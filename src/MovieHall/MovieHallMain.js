@@ -22,6 +22,8 @@ import { mainListItems
   // ,secondaryListItems 
 } from '../Shared/listItems';
 import { MovieHall } from './MovieHall';
+import { useHistory } from "react-router-dom";
+
 
 function Copyright() {
   return (
@@ -45,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
   toolbar: {
     paddingRight:24, // keep right padding when drawer closed
-    backgroundColor:' #333545',
+    backgroundColor:'#3f50b5',
     position: 'fixed',
     width:'100%'
   },
@@ -134,6 +136,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MovieHallMain() {
   const classes = useStyles();
+  let history = useHistory();
+  // console.log()
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -187,7 +191,7 @@ export default function MovieHallMain() {
         {/* <List>{secondaryListItems}</List> */}
       </Drawer>
       <span className={classes.InnerComponent}>
-      <MovieHall />
+      <MovieHall path={history.location.pathname}/>
       </span>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />

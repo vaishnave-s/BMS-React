@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
   toolbar: {
     paddingRight:24, // keep right padding when drawer closed
-    backgroundColor:' #333545',
+    backgroundColor:'#3f50b5',
     position: 'fixed',
     width:'100%'
   },
@@ -134,6 +134,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MovieMain() {
   const classes = useStyles();
+
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
     setOpen(true);

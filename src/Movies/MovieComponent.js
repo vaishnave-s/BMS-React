@@ -15,9 +15,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
-
+import {withRouter} from 'react-router-dom';
 class MovieComponent extends Component {
-    constructor(props) {  
+    constructor(props) { 
         super(props);  
         this.state = {
           open: false,
@@ -59,8 +59,8 @@ class MovieComponent extends Component {
 
         <Grid container spacing={4}>
     {this.state.movies.map((movie,index) => (
-      <Grid item key={index} xs={12} sm={6} md={4}>
-        <Card className="card">
+      <Grid item key={index} xs={12} sm={6} md={6}>
+        <Card className="card" elevation={10}>
           <CardMedia
             className="cardMedia"
             image={movie.PosterURL!==null?(movie.PosterURL):'https://images.unsplash.com/photo-1478720568477-152d9b164e26?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80'}
@@ -83,7 +83,12 @@ class MovieComponent extends Component {
             <Button size="small" color="primary" onClick={this.handleOpen(movie.ID)}>
               View
             </Button>
-            <Modal disableScrollLock open={this.state.open} onClose={this.handleClose}>
+            <Button size="small" color="primary" onClick={()=>this.props.history.push("/booking/"+String(movie.ID))}>
+            {/* onClick={this.props.history.push("/booking/"+String(movie.ID))} */}
+              Book
+            </Button>
+          </CardActions>
+          <Modal disableScrollLock open={this.state.open} onClose={this.handleClose}>
             {/* display the content based on newly set state */}
             <div className="modal">
               {/* {this.state.movies.forEach(m => m.ID == this.state.ID).Name} */}
@@ -117,7 +122,6 @@ class MovieComponent extends Component {
               )}
               </div>
           </Modal>
-          </CardActions>
         </Card>
       </Grid>
     ))}
@@ -130,4 +134,4 @@ class MovieComponent extends Component {
   }
 }
 
-export default MovieComponent;
+export default withRouter(MovieComponent);

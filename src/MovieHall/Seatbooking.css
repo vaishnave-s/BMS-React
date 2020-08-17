@@ -11,7 +11,7 @@ h1 {
 }
 
 .grid td {
-  width: 80px;
+  width: 55px;
   height: 50px;
   border: 2px solid black;
   text-align: center;
@@ -19,42 +19,48 @@ h1 {
   margin: 5px;
 }
 
-.grid td:hover {
-  opacity: .7;
-  cursor: pointer;
-}
 
 .reserved {
-  background: orange;
+  background: rgba(97, 97, 97, 0.521);
   color: #fff;
   display: inline-block;
+  opacity: .6;
+
+}
+.reserved:hover{
+  cursor: not-allowed;
+
 }
 
 .selected {
-  background: red;
+  background: green;
   color: #fff;
   display: inline-block;
 }
 
 .reserved::after {
-  content: 'RESERVED';
-  font-size: 14px;
+  /* content: 'RESERVED'; */
+  /* font-size: 14px; */
+
 }
 
 .selected::after {
-  font-size: 14px;
-  content: 'SELECTED'
+  /* font-size: 14px; */
+  /* content: 'SELECTED' */
 }
 
 .available::after {
-  font-size: 14px;
-  content: 'AVAILABLE'
+  /* font-size: 14px; */
+  /* content: 'AVAILABLE' */
 }
 
 .available {
   color: #333;
 }
-
+.selected:hover,.available:hover{
+  opacity: .7;
+  cursor: pointer;
+}
 li {
   list-style: none;
 }

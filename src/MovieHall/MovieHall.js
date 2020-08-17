@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-// import axios from 'axios';
+import axios from 'axios';
 import { RadioGroup, RadioButton, ReversedRadioButton } from 'react-radio-buttons';
 
-import Main from './Main';
-import '../stylesheets/MovieHall.css';
+import Main from './MovieHallMain';
+import './MovieHall.css';
 import Seatbooking from './Seatbooking';
+import MovieHallMain from './MovieHallMain';
 
 export class MovieHall extends Component {
 
@@ -18,7 +19,7 @@ export class MovieHall extends Component {
     //   genre: "",
     //   format: "",
     //   hall: "",
-      date: null,
+      date: new Date().toISOString().substring(0, 10),
       selectedShow:null,
       shows:[],
       book: false,
@@ -30,51 +31,51 @@ export class MovieHall extends Component {
 
 
   handleChange(event) {
-      console.log()
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
-
     this.setState({
       [name]: value,
       book:false,
-      displayShows:false
     });
 
   }
   handleDisplayShows= (event) =>{
+
     event.preventDefault();
     this.setState({displayShows:true});
-//     console.log("helo")
-//    axios.get("https://localhost:44343/api/show", {
-    // params: {
-    //     MovieID: this.props.ID,
-    //     RequestedDate: this.state.date
-    //   }
-    // })
-//        .then(response => {
-//            // console.log(response.data);
-//            // movies(response.data);
-//            this.setState({shows:response.data});
-//            console.log(response.data)
+    // console.log("helo")
+   axios.get("https://localhost:44343/api/show", {
+    params: {
+        MovieID:1,
+        RequestedDate: this.state.date
+      }
+    })
+       .then(response => {
+           // console.log(response.data);
+           // movies(response.data);
+           this.setState({shows:response.data});
+           console.log(response.data)
 
-//        })
-//        .catch(error=>{
-//            error.log(error);
-//        })
+       })
+       .catch( error=>{
+           console.log('error', error)
+
+
+       })
 
   }
   handleSubmit= (event) =>{
+    console.log(this.state)
+
     event.preventDefault();
     this.setState({book: true});
   }
 
   render(){
     return(
-      <div>
-        <div>
-          <Main />
-        </div>
+      <div style={{padding:'1rem'}}>
+
 
         <div className="container form">
           <form onSubmit={this.handleSubmit}>
@@ -126,25 +127,31 @@ export class MovieHall extends Component {
             <label>
             Date:
             </label>
-            <input type="date" name="date" defaultValue={new Date().toISOString().substring(0, 10)}/>
+            <input type="date" name="date" min={new Date().toLocaleString("en-IN", {timeZone: "Asia/Kolkata"}).substring(0, 10)} defaultValue={new Date().toISOString().substring(0, 10)} required onChange={this.handleChange}/>
           </div>
-          <div>
+          <div className="form-group">
             <input onClick={this.handleDisplayShows} type="button" value="Display shows" />
             </div>
             {this.state.displayShows ? <div> 
                 <div className="form-group">
             <label>
-            {/* Shows:
-            <RadioGroup className="custom-select mb-2 mr-sm-2 mb-sm-0" name="selectedShow" value={this.state.selectedShow} onChange={this.handleChange}>
+            Shows:
+            <select className="custom-select mb-2 mr-sm-2 mb-sm-0" name="selectedShow" onChange={this.handleChange}>
+            <option disabled selected value> -- select an option -- </option>
     {this.state.shows.map((show,index) => (
             
-            <ReversedRadioButton value={show.ShowID}>{show.ShowTime}</ReversedRadioButton>
+            // <option value={String(show.ShowID)}>{show.ShowTime}</option>
+            <option
+            value={String(show.ShowID)}
+          >{show.ShowTime} @ {show.TheatreName}</option>
             ))}
-            </RadioGroup> */}
+            </select>
             </label>
           </div>
             <div>
-            <input type="submit" value="Submit" />
+        {this.state.selectedShow ? <input type="submit" value="Submit" /> : null }
+
+            
             </div>
             </div>: null }
         </form>

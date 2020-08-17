@@ -1,5 +1,4 @@
 import React from 'react';
-import MovieComponent from './MovieComponent';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -22,6 +21,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems
   // ,secondaryListItems 
 } from '../Shared/listItems';
+import { MovieHall } from './MovieHall';
 
 function Copyright() {
   return (
@@ -132,7 +132,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function MovieMain() {
+export default function MovieHallMain() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -159,7 +159,7 @@ export default function MovieMain() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Movies
+            Ticket Booking
           </Typography>
           {/* <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -187,7 +187,7 @@ export default function MovieMain() {
         {/* <List>{secondaryListItems}</List> */}
       </Drawer>
       <span className={classes.InnerComponent}>
-      <MovieComponent />
+      <MovieHall />
       </span>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />

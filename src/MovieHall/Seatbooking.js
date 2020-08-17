@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import '../stylesheets/seats.css';
+import axios from 'axios';
+
+import './Seatbooking.css';
 
 class Seatbooking extends React.Component {
 
@@ -13,19 +15,22 @@ class Seatbooking extends React.Component {
     }
   }
   componentDidMount(){
-//     console.log("helo")
-  //  axios.get("https://localhost:44343/api/seats/"+string(this.props.ID))
-  //      .then(response => {
-  //          // console.log(response.data);
-  //          // seats(response.data);
-  //          this.setState({seat:response.data.seats});
-  //          this.setState({shows:response.data.seatsReserved});
-  //          console.log(response.data)
+    console.log(this.props.ID)
+   axios.get("https://localhost:44343/api/seats/"+this.props.ID)
+       .then(response => {
+           // console.log(response.data);
+           // seats(response.data);
+           console.log(response.data)
 
-  //      })
-  //      .catch(error=>{
-  //          error.log(error);
-  //      })
+           this.setState({seat:response.data.Seats});
+           this.setState({seatReserved:response.data.ReservedSeats});
+           console.log(this.state)
+
+
+       })
+       .catch(error=>{
+           error.log(error);
+       })
 
 }
 

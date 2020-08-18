@@ -20,6 +20,7 @@ class App extends Component {
       {/* <div style={{width:"100%",height:"100%",backgroundColor:"#f2f2f2"}}><MovieComponent/></div> */}
       <Route path="/movies" component={MovieMain}></Route>
       <Route path="/booking" component={MovieHallMain}></Route>
+      <Route path="/" component={SignIn}></Route>
      {/* <div style={{width:"100%",height:"100%",backgroundColor:"#f2f2f2"}}><MovieHallMain/></div> */}
      </Switch>
       </div>

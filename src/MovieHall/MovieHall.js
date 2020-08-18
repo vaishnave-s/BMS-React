@@ -163,9 +163,12 @@ export class MovieHall extends Component {
         </form>
       </div>
 
+      {this.state.shows.filter(s => s.ShowID == parseInt(this.state.selectedShow)).map((m)=>
+      (
       <div>
-        {this.state.book ? <Seatbooking ID={this.state.selectedShow} /> : null }
+        {this.state.book ? <Seatbooking showInfo={{selectedDate:this.state.date,selectedShow:m}}/> : null }
       </div>
+        ))};
     </div>
     )
   }

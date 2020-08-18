@@ -72,7 +72,7 @@ class MovieComponent extends Component {
             </Typography>
             <Typography style={{fontSize:12,paddingBottom:10}}>
               {/* Cast : <div style={{display:'inline'}}>{movie.Cast.map((actor,index) => (<div style={{display:'inline'}}>{actor.ActorName}</div>))}</div> */}
-              Cast : <div style={{display:'inline'}}>{movie.Cast.map((actor,aindex) => (<span key={`${aindex}`}>{ (aindex ? ', ' : '') + actor.ActorName }</span>))}</div>
+              Cast : <div style={{display:'inline'}}>{movie.Cast.map((actor,aindex) => (<span key={`${aindex}`}>{ (aindex ? ', ' : '') + actor }</span>))}</div>
             </Typography>
             {/* <Typography style={{fontSize:12}}>
               {movie.Synopsis}
@@ -103,7 +103,7 @@ class MovieComponent extends Component {
             </Typography>
             <Typography style={{fontSize:14,paddingBottom:10}}>
               {/* Cast : <div style={{display:'inline'}}>{movie.Cast.map((actor,index) => (<div style={{display:'inline'}}>{actor.ActorName}</div>))}</div> */}
-              Cast : <div style={{display:'inline'}}>{m.Cast.map((actor,aindex) => (<span key={`${aindex}`}>{ (aindex ? ', ' : '') + actor.ActorName }</span>))}</div>
+              Cast : <div style={{display:'inline'}}>{m.Cast.map((actor,aindex) => (<span key={`${aindex}`}>{ (aindex ? ', ' : '') + actor }</span>))}</div>
             </Typography>
             <Typography style={{fontSize:14,paddingBottom:10}}>
             Director : {m.Director}

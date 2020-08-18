@@ -18,12 +18,10 @@ import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems
-  // ,secondaryListItems 
-} from '../Shared/listItems';
-import { MovieHall } from './MovieHall';
 import { useHistory } from "react-router-dom";
-
+//Component Imports
+import { MovieHall } from './components/MovieHall/MovieHall';
+import { mainListItems} from '../../components/shared/listItems';
 
 function Copyright() {
   return (

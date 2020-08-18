@@ -2,22 +2,15 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { RadioGroup, RadioButton, ReversedRadioButton } from 'react-radio-buttons';
 
-import Main from './MovieHallMain';
+//Component Imports
 import './MovieHall.css';
-import Seatbooking from './Seatbooking';
-import MovieHallMain from './MovieHallMain';
+import Seatbooking from './components/Seatbooking/Seatbooking';
 
 export class MovieHall extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-    //   hallSeat: "",
-    //   movie: "",
-    //   au: "U",
-    //   genre: "",
-    //   format: "",
-    //   hall: "",
       date: new Date().toISOString().substring(0, 10),
       selectedShow:null,
       shows:[],

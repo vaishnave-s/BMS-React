@@ -1,5 +1,4 @@
 import React from 'react';
-import MovieComponent from './MovieComponent';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -19,9 +18,11 @@ import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems
-  // ,secondaryListItems 
-} from '../Shared/listItems';
+
+//Component imports
+import MovieComponent from './components/Movies';
+import { mainListItems} from '../../components/shared/listItems';
+
 
 function Copyright() {
   return (

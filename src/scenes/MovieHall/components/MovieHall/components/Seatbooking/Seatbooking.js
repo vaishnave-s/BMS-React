@@ -178,7 +178,7 @@ handleChange(event) {
   <div><label>Show time: </label>{this.props.showInfo.selectedShow.ShowTime}</div>
   <div><label>Theatre: </label>{this.props.showInfo.selectedShow.TheatreName}, {this.props.showInfo.selectedShow.TheatreLocation}</div>
   <div><label>Tickets chosen: </label>{this.props.reserved}</div>
-  <div><label><b>Total price: </b></label>{(this.props.showInfo.selectedShow.Price)*(this.props.reserved.length)}</div>
+  <div><label><b>Total price: Rs </b></label>{(this.props.showInfo.selectedShow.Price)*(this.props.reserved.length)}</div>
   <select className="custom-select mb-2 mr-sm-2 mb-sm-0" name="Transaction" onChange={this.handleChange}>
             <option disabled selected value> -- select an option -- </option>
             <option value="Netbanking">Netbanking</option>

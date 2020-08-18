@@ -4,10 +4,12 @@ import { Route,Switch } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
 //Imports
-import SignIn from './SignIn/SignIn';
-import SignUp from './SignUp/SignUp';
-import MovieMain from './Movies/MovieMain';
-import MovieHallMain from './MovieHall/MovieHallMain';
+import SignIn from './scenes/Onboarding/SignIn/index';
+import ForgotPassword from './scenes/Onboarding/ForgotPassword/index';
+import ResetPassword from './scenes/Onboarding/ResetPassword/index';
+import SignUp from './scenes/Onboarding/SignUp/index';
+import MovieMain from './scenes/Movies/index';
+import MovieHallMain from './scenes/MovieHall/index';
 import Modal from '@material-ui/core/Modal';
 
 class App extends Component {
@@ -20,9 +22,14 @@ class App extends Component {
       {/* <div style={{width:"100%",height:"100%",backgroundColor:"#f2f2f2"}}><MovieComponent/></div> */}
       <Route path="/movies" component={MovieMain}></Route>
       <Route path="/booking" component={MovieHallMain}></Route>
-      <Route path="/" component={SignIn}></Route>
+      {/* <Route path="/signin" component={SignIn}></Route> */}
+      <Route path="/signin" component={SignIn}></Route>
+      <Route path="/signup" component={SignUp}></Route>
+      <Route path="/forgotpassword" component={ForgotPassword}></Route>
+      <Route path="/resetpassword" component={ResetPassword}></Route>
      {/* <div style={{width:"100%",height:"100%",backgroundColor:"#f2f2f2"}}><MovieHallMain/></div> */}
      </Switch>
+     
       </div>
     );
   }

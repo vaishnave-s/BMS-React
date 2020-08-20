@@ -39,7 +39,7 @@ class ResetPassword extends Component {
   .then(json => {  
     console.log(json);  
     json.status==200?alert("Your password has been reset!"):null;
-    this.props.history.push("/signin");  
+    this.props.history.push("/");  
 
   }).catch(e => {
     console.log(e.response);

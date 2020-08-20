@@ -145,7 +145,7 @@ export default class AccountDetails extends React.Component {
 
     render() {
         return (
-            <Container maxWidth="sm" className="container">
+            <Container maxWidth="md" className="container">
 
                 <Grid item xs={12}>
                     <Paper className="paper" elevation={10}>
@@ -175,7 +175,8 @@ export default class AccountDetails extends React.Component {
                                         id="name"
                                         value={this.state.name}
                                         onChange={this.handleChange}
-
+                                        error={!/^[a-z ,.'-]+$/i.test(this.state.name)}
+                                        helperText={!/^[a-z ,.'-]+$/i.test(this.state.name)?"Enter a valid name.":null}
                                     />
                                 </label>
 
@@ -241,12 +242,13 @@ export default class AccountDetails extends React.Component {
                                         name="number"
                                         // label="Password"
                                         type="text"
-                                        inputProps={{ pattern: "[0-9+]" }}
                                         id="number"
                                         value={this.state.edit?(this.state.number=="None"?"":this.state.number):this.state.number}
 
                                         onChange={this.handleChange}
-
+                                        error={this.state.number!="None"?(!(/^[0-9+ ]*$/.test(this.state.number))):null}
+                                        helperText={(this.state.number!="None"?(!(/^[0-9+ ]*$/.test(this.state.number))):null)?"Enter a valid contact number.":null}
+                                    
                                     />
                                 </label>
 

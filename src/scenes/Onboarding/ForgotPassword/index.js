@@ -122,7 +122,7 @@ class ForgotPassword extends Component {
             <Grid container justify="flex-end" style={{ marginTop: 20 }}>
 
                   <Grid item>
-                    <Link href="#" variant="body2" onClick={()=>(this.props.history.push("/signin"))}>
+                    <Link href="#" variant="body2" onClick={()=>(this.props.history.push("/"))}>
                       Remember your password? Sign in
                     </Link>
                   </Grid>

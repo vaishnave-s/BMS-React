@@ -12,7 +12,7 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import { useHistory } from "react-router-dom";
-
+import Auth from '../../Auth';
 
 const MainListItems = () => {
   let history = useHistory();
@@ -58,7 +58,7 @@ const MainListItems = () => {
         <ExitToAppIcon />
       </ListItemIcon>
       <ListItemText primary="Logout" 
-      onClick={()=>{sessionStorage.clear();history.push('/signin')}}
+      onClick={()=>{Auth.logout(()=>{sessionStorage.clear();history.push('/')})}}
       /> 
       
     </ListItem>

@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 // import {withRouter} from 'react-router-dom';
 import './index.css';
+import Auth from '../../../Auth';
 
 class SignIn extends Component {
   constructor(props) { 
@@ -45,7 +46,7 @@ class SignIn extends Component {
     sessionStorage.setItem("UserID",json.data.Customer.CustomerID),
 sessionStorage.setItem("UserEmail",json.data.Customer.CustomerEmail),
 sessionStorage.setItem("isAdmin",json.data.Customer.isAdmin==false?0:1)):null;
-    this.props.history.push("/home");  
+Auth.login(()=>{this.props.history.push("/home")})
     
   }).catch(e => {
     console.log(e.response);

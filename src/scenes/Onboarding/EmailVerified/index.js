@@ -97,7 +97,7 @@ class EmailVerified extends Component {
 
                   <Grid item>
       
-                    <Link href="#" variant="body2" onClick={()=>(this.props.history.push("/signin"))}>
+                    <Link href="#" variant="body2" onClick={()=>(this.props.history.push("/"))}>
                       Sign in
                     </Link>
                   </Grid>

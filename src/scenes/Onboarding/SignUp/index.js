@@ -178,7 +178,7 @@ class SignUp extends Component {
             <Grid container justify="flex-end" style={{ marginTop: 20 }}>
 
                   <Grid item>
-                    <Link href="#" variant="body2" onClick={()=>(this.props.history.push("/signin"))}>
+                    <Link href="#" variant="body2" onClick={()=>(this.props.history.push("/"))}>
                       Already have an account? Sign in
                     </Link>
                   </Grid>

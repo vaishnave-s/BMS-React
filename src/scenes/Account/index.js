@@ -21,7 +21,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { useHistory } from "react-router-dom";
 //Component Imports
 import  MainListItems from '../../components/shared/listItems';
-import AccountDetails from './AccountDetails/AccountDetails';
+import AccountDetails from './components/AccountDetails/AccountDetails';
 
 function Copyright() {
   return (
@@ -193,7 +193,7 @@ export default function Home() {
         {/* <List>{secondaryListItems}</List> */}
       </Drawer>
       <span className={classes.InnerComponent}>
-      <AccountDetails/>
+      <AccountDetails history={history}/>
       </span>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />

@@ -10,6 +10,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import jwt_decode from 'jwt-decode';
+import Auth from '../../../../Auth';
 
 import './AccountDetails.css';
 
@@ -84,6 +86,17 @@ export default class AccountDetails extends React.Component {
             });
     }
     componentDidMount() {
+        console.log(this.props)
+if(Auth.isAuthenticated()){
+var decoded = jwt_decode(sessionStorage.getItem("token"));
+var tokenExpiration = new Date(decoded.exp*1000);
+var currentDate = new Date();
+if(currentDate>tokenExpiration){
+  alert("Your session has expired.");
+  Auth.logout(()=>{sessionStorage.clear();this.props.history.push('/')});
+}
+}
+
         axios.get("https://localhost:44343/api/user/user/" + sessionStorage.getItem("UserID"))
             .then(response => {
                 // console.log(response.data);

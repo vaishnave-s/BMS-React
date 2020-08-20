@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { RadioGroup, RadioButton, ReversedRadioButton } from 'react-radio-buttons';
+import jwt_decode from 'jwt-decode';
+import Auth from '../../../../Auth';
 
 //Component Imports
 import './MovieHall.css';
@@ -41,6 +43,16 @@ export class MovieHall extends Component {
     console.log(this.state.date);
     event.preventDefault();
     this.setState({displayShows:true});
+
+if(Auth.isAuthenticated()){
+var decoded = jwt_decode(sessionStorage.getItem("token"));
+var tokenExpiration = new Date(decoded.exp*1000);
+var currentDate = new Date();
+if(currentDate>tokenExpiration){
+  alert("Your session has expired.");
+  Auth.logout(()=>{sessionStorage.clear();this.props.history.push('/')});
+}
+}
    axios.get("https://localhost:44343/api/show", {
     params: {
         MovieID:parseInt(this.props.path.substring(this.props.path.lastIndexOf('/') + 1)),

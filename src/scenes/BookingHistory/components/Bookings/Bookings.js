@@ -9,6 +9,10 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import axios from 'axios';
+import jwt_decode from 'jwt-decode';
+import Auth from '../../../../Auth';
+import { useHistory } from "react-router-dom";
+
 
 const columns = [
   { id: 'bookingDate', label: 'Booking Date', minWidth: 170 },
@@ -44,7 +48,8 @@ function createData(bookings) {
   }
  
   }
-  
+
+
 axios.get("https://localhost:44343/api/bookings/customer/"+sessionStorage.getItem("UserID"))
      .then(response => {
          // console.log(response.data);
@@ -72,6 +77,17 @@ const useStyles = makeStyles({
 });
 
 export default function StickyHeadTable() {
+let history = useHistory();
+
+if(Auth.isAuthenticated()){
+  var decoded = jwt_decode(sessionStorage.getItem("token"));
+  var tokenExpiration = new Date(decoded.exp*1000);
+  var currentDate = new Date();
+  if(currentDate>tokenExpiration){
+    alert("Your session has expired.");
+    Auth.logout(()=>{sessionStorage.clear();history.push('/')});
+  }
+  }
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);

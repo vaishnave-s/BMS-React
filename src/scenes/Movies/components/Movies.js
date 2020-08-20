@@ -16,6 +16,9 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import {withRouter} from 'react-router-dom';
+import jwt_decode from 'jwt-decode';
+import Auth from '../../../Auth';
+
 class MovieComponent extends Component {
     constructor(props) { 
         super(props);  
@@ -26,7 +29,16 @@ class MovieComponent extends Component {
       }  
 
      componentDidMount(){
-         console.log("helo")
+
+      if(Auth.isAuthenticated()){
+      var decoded = jwt_decode(sessionStorage.getItem("token"));
+      var tokenExpiration = new Date(decoded.exp*1000);
+      var currentDate = new Date();
+      if(currentDate>tokenExpiration){
+        alert("Your session has expired.");
+        Auth.logout(()=>{sessionStorage.clear();this.props.history.push('/')});
+      }
+      }
         axios.get("https://localhost:44343/api/movies")
             .then(response => {
                 // console.log(response.data);

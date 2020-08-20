@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import {withRouter} from 'react-router-dom';
+import jwt_decode from 'jwt-decode';
+import Auth from '../../../../../../Auth';
 
 import './Seatbooking.css';
 
@@ -21,6 +23,16 @@ class Seatbooking extends React.Component {
 
   }
   componentDidMount(){
+
+if(Auth.isAuthenticated()){
+var decoded = jwt_decode(sessionStorage.getItem("token"));
+var tokenExpiration = new Date(decoded.exp*1000);
+var currentDate = new Date();
+if(currentDate>tokenExpiration){
+  alert("Your session has expired.");
+  Auth.logout(()=>{sessionStorage.clear();this.props.history.push('/')});
+}
+}
    axios.get("https://localhost:44343/api/seats/", {
     params: {
         ShowID:this.props.showInfo.selectedShow.ShowID,

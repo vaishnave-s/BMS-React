@@ -5,12 +5,13 @@
   }
   .image{
 
-    background-image: url("../../../Assets/BG.jpg");
-    /* background-repeat: no-repeat; */
+    /* background-image: url("./hallImage.jpg"); */
+    background-repeat: no-repeat;
     background-color:red;
-    /* background-size: cover; */
+    background-size: cover;
     background-position: center;
   }
+
   .paper{
     margin: 30px;
     display: flex;

@@ -15,56 +15,34 @@ import Button from '@material-ui/core/Button';
 // import {withRouter} from 'react-router-dom';
 import './index.css';
 
-class ForgotPassword extends Component {
-  constructor(props) { 
-    super(props);  
-    this.state = {
-    email:null,
-    snackbaropen :false, snackbarmsg:'',
-    isAvailable:false,
-    SubmissionStatus:false, 
-    };  
-    this.handleChange = this.handleChange.bind(this); 
-  }  
-  snackbarClose = (e) =>{
-    this.setState({snackbaropen:false});
-  }
-  
-  SendLink=()=>{  
-    console.log(this.state);  
-
-    axios.post('https://localhost:44343/api/authentication/forgotpassword',null,{params:{
-      email: this.state.email}
-  } )  
-  .then(json => {  
-    console.log(json);  
-    json.status==200?(alert("A password reset link has been sent!"),
-    window.location.reload(true)
-    ):null;
-
-    
-  }).catch(e => {
-    // console.log(e.response);
-    // e.response.status==400 && e.response.data.Message=="Invalid Credentials"?alert("Invalid credentials"):null;
-    e.response.status==400 && e.response.data.Message=="This user doesn't exist."?alert("This user doesn't exist!"):null;
-    // e.response.status==400 && e.response.data.Message=="User Not Verified"?alert("This user is not verified."):null;
-    // e.response.status!=400?alert("There was an error. Please try again."):null;
-    // window.location.reload(true); 
-
-    })  
-  }  
-  
-  handleChange= (e)=> {  
-  this.setState({[e.target.name]:e.target.value});
-  this.setState( {isAvailable: true });  
-  console.log(this.state);
-
-  } 
-  
-  handleSubmit=(e)=>{
-    e.preventDefault();
-        this.SendLink();
-  }
+class EmailVerified extends Component {
+    constructor(props) { 
+        super(props);  
+        this.state = {
+        message:null
+        };  
+      }  
+      componentDidMount(){
+        axios.post("https://localhost:44343/api/authentication/verifyemail", null,{
+          params: {
+              token:this.props.location.pathname.substring(this.props.location.pathname.lastIndexOf('/') + 1)
+            }
+          })
+             .then(response => {
+                 // console.log(response.data);
+                 // movies(response.data);
+                 console.log(response.data)
+                 response.data=="This account has been verified."?this.setState({message:"Your email has been verified."}):null;
+      
+             })
+             .catch( error=>{
+                 console.log(error.response.data)
+                 error.response.data.Message=="Already Verified"?this.setState({message:"This email has already been verified."}):null;
+                 error.response.data.Message=="Invalid Token"?this.setState({message:"Please use the correct link URL to verify your account."}):null;
+                //  window.location.reload(true); 
+              
+             })
+      }
       render() {
         return (
   
@@ -79,14 +57,14 @@ class ForgotPassword extends Component {
                 <LockOutlinedIcon />
               </Avatar>
               <Typography component="h1" variant="h5">
-                Forgot password
+                Email verification
               </Typography>
               <form className="formClass" noValidate>
-              <Grid container spacing={2} style={{ marginTop: 10 }}>
+              <Grid container direction="column" alignItems="center"  justify="center" spacing={2} style={{ marginTop: 10 }}>
 
               <Grid item xs={12}>
-
-              <TextField
+              {this.state.message}
+              {/* <TextField
               variant="outlined"
               required
               fullWidth
@@ -95,35 +73,32 @@ class ForgotPassword extends Component {
               name="email"
               autoComplete="email"
               autoFocus
-              onChange={this.handleChange}
-
-            />
+            /> */}
             </Grid>
                   <Grid item xs={12}>
 
-
+                  Sign in to the website to access your account.
             </Grid>
             <Grid item xs={12}>
-
+{/* 
             <Button
                   type="submit"
                   fullWidth
                   variant="contained"
                   color="primary"
                   className="submitButton"
-                  onClick={this.handleSubmit}
-                  disabled={!this.state.email}
             >
               Send Link
-            </Button>
+            </Button> */}
             </Grid>
             </Grid>
 
-            <Grid container justify="flex-end" style={{ marginTop: 20 }}>
+            <Grid container justify="center" style={{ marginTop: 20 }}>
 
                   <Grid item>
+      
                     <Link href="#" variant="body2" onClick={()=>(this.props.history.push("/signin"))}>
-                      Remember your password? Sign in
+                      Sign in
                     </Link>
                   </Grid>
                 </Grid>
@@ -138,6 +113,6 @@ class ForgotPassword extends Component {
       }
     }
     
-    export default ForgotPassword;
+    export default EmailVerified;
     // export default withRouter(SignUp);
     

@@ -21,7 +21,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 
 //Component imports
 import MovieComponent from './components/Movies';
-import { mainListItems} from '../../components/shared/listItems';
+import  MainListItems from '../../components/shared/listItems';
 
 
 function Copyright() {
@@ -128,7 +128,10 @@ const useStyles = makeStyles((theme) => ({
     height: 240,
   },
   InnerComponent: {
-    paddingTop: theme.spacing(10),
+      padding: theme.spacing(10),
+
+paddingTop: theme.spacing(14),
+width:'100%'
 
   },
 }));
@@ -184,7 +187,7 @@ export default function MovieMain() {
           </IconButton>
         </div>
         <Divider />
-        <List>{mainListItems}</List>
+        <List><MainListItems/></List>
         {/* <Divider /> */}
         {/* <List>{secondaryListItems}</List> */}
       </Drawer>

@@ -16,12 +16,59 @@ import Button from '@material-ui/core/Button';
 import './index.css';
 
 class SignIn extends Component {
-    constructor(props) { 
-        super(props);  
-        this.state = {
-        
-        };  
-      }  
+  constructor(props) { 
+    super(props);  
+    this.state = {
+    email:null,
+    password:null,
+    snackbaropen :false, snackbarmsg:'',
+    isAvailable:false,
+    SubmissionStatus:false, 
+    };  
+    this.handleChange = this.handleChange.bind(this); 
+  }  
+
+  snackbarClose = (e) =>{
+    this.setState({snackbaropen:false});
+  }
+  
+  GetLoginToken=()=>{  
+    console.log(this.state);  
+
+    axios.post('https://localhost:44343/api/token',{
+      email: this.state.email,
+      password: this.state.password
+  } )  
+  .then(json => {  
+    console.log(json);  
+    json.status==200?(sessionStorage.setItem("token",json.data.AuthToken),
+    sessionStorage.setItem("UserID",json.data.Customer.CustomerID),
+sessionStorage.setItem("UserEmail",json.data.Customer.CustomerEmail),
+sessionStorage.setItem("isAdmin",json.data.Customer.isAdmin==false?0:1)):null;
+    this.props.history.push("/home");  
+    
+  }).catch(e => {
+    console.log(e.response);
+    e.response.status==400 && e.response.data.Message=="Invalid Credentials"?alert("Invalid credentials"):null;
+    e.response.status==400 && e.response.data.Message=="User Doesn't Exist"?alert("This user doesn't exist!"):null;
+    e.response.status==400 && e.response.data.Message=="User Not Verified"?alert("This user is not verified."):null;
+    // e.response.status!=400?alert("There was an error. Please try again."):null;
+    // window.location.reload(true); 
+
+    })  
+  }  
+  
+  handleChange= (e)=> {  
+  this.setState({[e.target.name]:e.target.value});
+  this.setState( {isAvailable: true });  
+  console.log(this.state);
+
+  } 
+  
+  handleSubmit=(e)=>{
+    e.preventDefault();
+        this.GetLoginToken();
+  }
       render() {
         return (
   
@@ -51,6 +98,8 @@ class SignIn extends Component {
               label="Email Address"
               name="email"
               autoComplete="email"
+              onChange={this.handleChange}
+              
               autoFocus
             />
             </Grid>
@@ -65,6 +114,8 @@ class SignIn extends Component {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={this.handleChange}
+
             />
             </Grid>
             <Grid item xs={12}>
@@ -75,6 +126,8 @@ class SignIn extends Component {
                   variant="contained"
                   color="primary"
                   className="submitButton"
+                  onClick={this.handleSubmit}
+                  disabled={!this.state.email||!this.state.password}
             >
               Sign In
             </Button>
@@ -83,12 +136,12 @@ class SignIn extends Component {
 
             <Grid container style={{ marginTop: 20 }}>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link href="#" variant="body2" onClick={()=>(this.props.history.push("/forgotpassword"))}>
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="#" variant="body2" onClick={()=>(this.props.history.push("/signup"))}>
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

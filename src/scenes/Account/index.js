@@ -20,10 +20,21 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { useHistory } from "react-router-dom";
 //Component Imports
-import { MovieHall } from './components/MovieHall/MovieHall';
 import  MainListItems from '../../components/shared/listItems';
+import AccountDetails from './AccountDetails/AccountDetails';
 
-
+function Copyright() {
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {'Copyright © '}
+      <Link color="inherit" href="https://material-ui.com/">
+        Your Website
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
 
 
 const drawerWidth = 240;
@@ -124,7 +135,7 @@ width:'100%'
   },
 }));
 
-export default function MovieHallMain() {
+export default function Home() {
   const classes = useStyles();
   let history = useHistory();
   // console.log()
@@ -153,7 +164,7 @@ export default function MovieHallMain() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Ticket Booking
+           Account
           </Typography>
           {/* <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -164,6 +175,7 @@ export default function MovieHallMain() {
       </AppBar>
 
       <Drawer
+      position="sticky"
         variant="permanent"
         classes={{
           paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
@@ -181,7 +193,7 @@ export default function MovieHallMain() {
         {/* <List>{secondaryListItems}</List> */}
       </Drawer>
       <span className={classes.InnerComponent}>
-      <MovieHall path={history.location.pathname}/>
+      <AccountDetails/>
       </span>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />

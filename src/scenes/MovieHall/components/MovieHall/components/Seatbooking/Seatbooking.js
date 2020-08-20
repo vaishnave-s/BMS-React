@@ -117,7 +117,7 @@ class DrawGrid extends React.Component {
 
     console.log(this.state)
     axios.post('https://localhost:44343/api/booking',{
-      CustomerID:1014,
+      CustomerID:sessionStorage.getItem("UserID"),
       ShowID:this.props.showInfo.selectedShow.ShowID,
       ShowDate:this.props.showInfo.selectedDate,
       PaymentAmount:parseFloat((this.props.showInfo.selectedShow.Price)*(this.props.reserved.length)),

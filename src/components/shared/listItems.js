@@ -11,38 +11,56 @@ import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
+import { useHistory } from "react-router-dom";
 
-export const mainListItems = (
+
+const MainListItems = () => {
+  let history = useHistory();
+
+  return(
   <div>
     <ListItem button>
       <ListItemIcon>
         <HomeIcon />
       </ListItemIcon>
-      <ListItemText primary="Home" />
+      <ListItemText primary="Home" 
+      onClick={()=>{history.push('/home')}}
+      />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
         <TheatersIcon />
       </ListItemIcon>
-      <ListItemText primary="Movies" />
+      <ListItemText primary="Movies" 
+      onClick={()=>{history.push('/movies')}}
+
+      />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
         <ShoppingCartIcon />
       </ListItemIcon>
-      <ListItemText primary="Orders" />
+      <ListItemText primary="Booking History" 
+      onClick={()=>{history.push('/bookinghistory')}}
+
+      />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
-      <ListItemText primary="Account" />
+      <ListItemText primary="Account" 
+      onClick={()=>{history.push('/account')}}
+      />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
         <ExitToAppIcon />
       </ListItemIcon>
-      <ListItemText primary="Logout" />
+      <ListItemText primary="Logout" 
+      onClick={()=>{sessionStorage.clear();history.push('/signin')}}
+      /> 
+      
     </ListItem>
     {/* <ListItem button>
       <ListItemIcon>
@@ -82,3 +100,6 @@ export const mainListItems = (
 //     </ListItem>
 //   </div>
 // );
+}
+
+export default MainListItems;

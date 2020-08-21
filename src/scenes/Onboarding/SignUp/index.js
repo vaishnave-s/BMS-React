@@ -122,26 +122,29 @@ class SignUp extends Component {
                       autoComplete="fullname"
                       name="fullName"
                       variant="outlined"
-                      required
+                      // required
                       fullWidth
                       id="fullName"
                       label="Full Name"
                       autoFocus
                       // value={this.state.fullName} 
                       onChange={this.handleChange}
+                      error={!nameRegexp.test(this.state.fullName)}
+                      helperText={!nameRegexp.test(this.state.fullName)?"Enter a valid name":null}
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
                       variant="outlined"
-                      required
+                      // required
                       fullWidth
                       id="email"
                       label="Email Address"
                       name="email"
                       // value={this.state.email} 
                       onChange={this.handleChange}
-
+                      error={this.state.email!=null?!emailRegexp.test(this.state.email):null}
+                      helperText={this.state.email!=null?(!emailRegexp.test(this.state.email)?"Enter a valid email address":null):null}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -168,7 +171,7 @@ class SignUp extends Component {
                   color="primary"
                   className="submitButton"
                   onClick={this.handleSubmit}
-                  disabled={!this.state.fullName||!this.state.email||!this.state.password}
+                  disabled={!((this.state.fullName||this.state.email||this.state.password) && (nameRegexp.test(this.state.fullName)) && (emailRegexp.test(this.state.email)))}
                 >
                   Sign Up
                 </Button>

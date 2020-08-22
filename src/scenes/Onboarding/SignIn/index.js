@@ -12,6 +12,10 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import MuiAlert from '@material-ui/lab/Alert';
+import CloseIcon from '@material-ui/icons/Close';
 // import {withRouter} from 'react-router-dom';
 import './index.css';
 import Auth from '../../../Auth';
@@ -22,7 +26,7 @@ class SignIn extends Component {
     this.state = {
     email:null,
     password:null,
-    snackbaropen :false, snackbarmsg:'',
+    snackbaropen :false, snackbarmsg:'',snackbartype:"",
     isAvailable:false,
     SubmissionStatus:false, 
     };  
@@ -44,15 +48,31 @@ class SignIn extends Component {
     console.log(json);  
     json.status==200?(sessionStorage.setItem("token",json.data.AuthToken),
     sessionStorage.setItem("UserID",json.data.Customer.CustomerID),
+    sessionStorage.setItem("UserName",json.data.Customer.CustomerName),
 sessionStorage.setItem("UserEmail",json.data.Customer.CustomerEmail),
 sessionStorage.setItem("isAdmin",json.data.Customer.isAdmin==false?0:1)):null;
+this.setState({snackbaropen:true , snackbartype:"success",snackbarmsg : "Welcome back, "+json.data.Customer.CustomerName+" !"});
+setTimeout(() => { 
 Auth.login(()=>{this.props.history.push("/home")})
-    
+}, 5000)
+
   }).catch(e => {
     console.log(e.response);
-    e.response.status==400 && e.response.data.Message=="Invalid Credentials"?alert("Invalid credentials"):null;
-    e.response.status==400 && e.response.data.Message=="User Doesn't Exist"?alert("This user doesn't exist!"):null;
-    e.response.status==400 && e.response.data.Message=="User Not Verified"?alert("This user is not verified."):null;
+    e.response.status==400 && e.response.data.Message=="Invalid Credentials"?(this.setState({snackbaropen:true , snackbartype:"error",snackbarmsg : "Invalid credentials"}),
+    setTimeout(() => { 
+    window.location.reload(true); 
+
+    }, 4000)):null;
+    e.response.status==400 && e.response.data.Message=="User Doesn't Exist"?(this.setState({snackbaropen:true , snackbartype:"error",snackbarmsg : "This user doesn't exist."}),
+    setTimeout(() => { 
+    window.location.reload(true); 
+
+    }, 4000)):null;
+    e.response.status==400 && e.response.data.Message=="User Not Verified"?(this.setState({snackbaropen:true , snackbartype:"error",snackbarmsg : "This user is not verified."}),
+    setTimeout(() => { 
+    window.location.reload(true); 
+
+    }, 4000)):null;
     // e.response.status!=400?alert("There was an error. Please try again."):null;
     // window.location.reload(true); 
 
@@ -75,6 +95,25 @@ Auth.login(()=>{this.props.history.push("/home")})
   
             <Grid container component="main" className="root">
             <CssBaseline />
+            <Snackbar 
+          anchorOrigin={{vertical:'top',horizontal:'right'}}
+          open = {this.state.snackbaropen}
+          autoHideDuration = {6000}
+          onClose={this.snackbarClose}
+          message = {<span id="message-id">{this.state.snackbarmsg}</span>}
+          action ={[
+            <IconButton 
+            key="close"
+            arial-label="close"
+            color="#FFFFFF"
+            onClick={this.snackbarClose}>
+            </IconButton>
+          ]}
+          >
+                  <MuiAlert elevation={6} variant="filled" onClose={this.state.snackbaropen} severity={this.state.snackbartype}>
+          {this.state.snackbarmsg}
+        </MuiAlert>
+        </Snackbar>
             <Grid item xs={false} sm={4} md={7} className="image" />
             <Grid className="paperContainer" item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
               <div className="paper">
@@ -128,6 +167,7 @@ Auth.login(()=>{this.props.history.push("/home")})
                   color="primary"
                   className="submitButton"
                   onClick={this.handleSubmit}
+                  
                   disabled={!this.state.email||!this.state.password}
             >
               Sign In

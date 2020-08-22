@@ -24,19 +24,6 @@ import MovieComponent from './components/Movies';
 import  MainListItems from '../../components/shared/listItems';
 
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
 
 const drawerWidth = 240;
 
@@ -131,7 +118,10 @@ const useStyles = makeStyles((theme) => ({
       padding: theme.spacing(10),
 
 paddingTop: theme.spacing(14),
-width:'100%'
+width:'100%',
+flexGrow: 1,
+height: '100vh',
+overflow: 'auto'
 
   },
 }));
@@ -187,7 +177,7 @@ export default function MovieMain() {
           </IconButton>
         </div>
         <Divider />
-        <List><MainListItems/></List>
+        <List><MainListItems active={"Movies"}/></List>
         {/* <Divider /> */}
         {/* <List>{secondaryListItems}</List> */}
       </Drawer>

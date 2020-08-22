@@ -71,7 +71,7 @@ class MovieComponent extends Component {
 
         <Grid container spacing={4}>
     {this.state.movies.map((movie,index) => (
-      <Grid item key={index} xs={12} sm={6} md={6}>
+      <Grid item key={index} xs={7} sm={4} style = {{minWidth: "250px"}} >
         <Card className="card" elevation={10}>
           <CardMedia
             className="cardMedia"

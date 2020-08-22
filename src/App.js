@@ -4,7 +4,6 @@ import { Route,Switch,Redirect } from 'react-router-dom';
 import logo from './logo.svg';
 import Modal from '@material-ui/core/Modal';
 import {ProtectedRoute} from './ProtectedRoute';
-import Auth from './Auth';
 import './App.css';
 //Imports
 import SignIn from './scenes/Onboarding/SignIn/index';
@@ -18,24 +17,13 @@ import EmailVerified from './scenes/Onboarding/EmailVerified/index'
 import BookingHistory from './scenes/BookingHistory/index';
 import Account from './scenes/Account/index';
 import NotFound from './components/NotFound/index'
-import jwt_decode from 'jwt-decode';
 
 
 class App extends Component {
   constructor(props){
     super(props);
   }
-  componentDidMount(){
-    console.log(this.props);
-  if(Auth.isAuthenticated()){
-  var decoded = jwt_decode(sessionStorage.getItem("token"));
-  var tokenExpiration = new Date(decoded.exp*1000);
-  var currentDate = new Date().getTime() + 7*60000;
-  if(currentDate>tokenExpiration){
-    alert("Your session has expired.");
-    // Auth.logout(()=>{sessionStorage.clear();this.props.history.push('/')});
-  }
-  }}
+
   render() {
     return (
       

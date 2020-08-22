@@ -7,19 +7,35 @@ import HomeIcon from '@material-ui/icons/Home';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import TheatersIcon from '@material-ui/icons/Theaters';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import BookIcon from '@material-ui/icons/Book';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import { useHistory } from "react-router-dom";
+import { makeStyles } from '@material-ui/core/styles';
+
 import Auth from '../../Auth';
 
-const MainListItems = () => {
-  let history = useHistory();
 
+const useStyles = makeStyles({
+  active: {
+    backgroundColor: "rgba(255, 0, 0, 0.2);",
+    '&:hover': {
+    backgroundColor: "rgba(255, 0, 0, 0.2);",
+    }
+  },
+});
+
+
+const MainListItems = (props) => {
+  let history = useHistory();
+  const classes = useStyles();
   return(
   <div>
-    <ListItem button>
+    <ListItem button
+    className={props.active=="Home"?classes.active:null}
+     >
       <ListItemIcon>
         <HomeIcon />
       </ListItemIcon>
@@ -27,7 +43,9 @@ const MainListItems = () => {
       onClick={()=>{history.push('/home')}}
       />
     </ListItem>
-    <ListItem button>
+    <ListItem button
+    className={props.active=="Movies"?classes.active:null}
+    >
       <ListItemIcon>
         <TheatersIcon />
       </ListItemIcon>
@@ -36,16 +54,20 @@ const MainListItems = () => {
 
       />
     </ListItem>
-    <ListItem button>
+    <ListItem button
+    className={props.active=="Booking History"?classes.active:null}
+    >
       <ListItemIcon>
-        <ShoppingCartIcon />
+        <BookIcon />
       </ListItemIcon>
       <ListItemText primary="Booking History" 
       onClick={()=>{history.push('/bookinghistory')}}
 
       />
     </ListItem>
-    <ListItem button>
+    <ListItem button
+    className={props.active=="Account"?classes.active:null}
+    >
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
@@ -53,7 +75,9 @@ const MainListItems = () => {
       onClick={()=>{history.push('/account')}}
       />
     </ListItem>
-    <ListItem button>
+    <ListItem button
+    className={props.active=="Logout"?classes.active:null}
+    >
       <ListItemIcon>
         <ExitToAppIcon />
       </ListItemIcon>

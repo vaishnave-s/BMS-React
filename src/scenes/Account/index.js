@@ -130,7 +130,10 @@ const useStyles = makeStyles((theme) => ({
       padding: theme.spacing(10),
 
 paddingTop: theme.spacing(14),
-width:'100%'
+width:'100%',
+flexGrow: 1,
+height: '100vh',
+overflow: 'auto'
 
   },
 }));
@@ -188,7 +191,8 @@ export default function Home() {
           </IconButton>
         </div>
         <Divider />
-        <List><MainListItems/></List>
+        <List><MainListItems active={"Account"}/></List>
+
         {/* <Divider /> */}
         {/* <List>{secondaryListItems}</List> */}
       </Drawer>

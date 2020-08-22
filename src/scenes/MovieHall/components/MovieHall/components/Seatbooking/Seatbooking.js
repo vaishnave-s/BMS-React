@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import {withRouter} from 'react-router-dom';
-import jwt_decode from 'jwt-decode';
-import Auth from '../../../../../../Auth';
-
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 import './Seatbooking.css';
 
 class Seatbooking extends React.Component {
@@ -24,15 +24,7 @@ class Seatbooking extends React.Component {
   }
   componentDidMount(){
 
-if(Auth.isAuthenticated()){
-var decoded = jwt_decode(sessionStorage.getItem("token"));
-var tokenExpiration = new Date(decoded.exp*1000);
-var currentDate = new Date();
-if(currentDate>tokenExpiration){
-  alert("Your session has expired.");
-  Auth.logout(()=>{sessionStorage.clear();this.props.history.push('/')});
-}
-}
+
    axios.get("https://localhost:44343/api/seats/", {
     params: {
         ShowID:this.props.showInfo.selectedShow.ShowID,
@@ -179,18 +171,32 @@ handleChange(event) {
             </tr>
           </tbody>
         </table>
-        <button type="button" className="btn-success btnmargin" onClick={() => this.props.handleSubmited()}>Book</button>
+        <div style={{display:'flex',justifyContent:'center',alignItems:'center',marginTop:20}}>
+        <Button
+        type="button"
+                  variant="contained"
+                  color="primary"
+                  onClick={() => this.props.handleSubmited()}
+            >Book</Button>
+            </div>
         <div>
       </div>
         </div>
   :<div>{this.props.confirmation ? 
-  <div>
+    
+    <Grid item xs={13}>
+    <Paper className="paper" elevation={10}>
+  <div className="confirmationSection">
+    
+   
     <h1>Confirmation</h1>
-  <div><label>Show date: </label>{this.props.showInfo.selectedDate}</div>
-  <div><label>Show time: </label>{this.props.showInfo.selectedShow.ShowTime}</div>
-  <div><label>Theatre: </label>{this.props.showInfo.selectedShow.TheatreName}, {this.props.showInfo.selectedShow.TheatreLocation}</div>
-  <div><label>Tickets chosen: </label>{this.props.reserved}</div>
-  <div><label><b>Total price: Rs </b></label>{(this.props.showInfo.selectedShow.Price)*(this.props.reserved.length)}</div>
+  <div><label>Show date: {this.props.showInfo.selectedDate}</label></div>
+  <div><label>Show time: {this.props.showInfo.selectedShow.ShowTime}</label></div>
+  <div><label>Theatre: {this.props.showInfo.selectedShow.TheatreName}, {this.props.showInfo.selectedShow.TheatreLocation}</label></div>
+  <div><label>Tickets chosen:{this.props.reserved} </label></div>
+  <div><b><label>Total price: Rs {(this.props.showInfo.selectedShow.Price)*(this.props.reserved.length)}</label></b></div>
+  <div><label>Transaction mode: 
+  
   <select className="custom-select mb-2 mr-sm-2 mb-sm-0" name="Transaction" onChange={this.handleChange}>
             <option disabled selected value> -- select an option -- </option>
             <option value="Netbanking">Netbanking</option>
@@ -198,11 +204,23 @@ handleChange(event) {
             <option value="Debit Card">Debit Card</option>
             <option value="UPI">UPI</option>
   </select>
-  <div>
-  <button type="button" name="btn-success btnmargin" onClick={() => this.confirmBooking()}>Confirm Booking</button>
+  </label>
   </div>
+
+  <div>
+  <Button
+        type="button"
+                  variant="contained"
+                  color="primary"
+                  onClick={() => this.confirmBooking()}
+                  disabled={!this.state.Transaction}
+            >Confirm Booking</Button>
   
-  </div>: null }</div>} </div>
+  </div>
+
+  </div>
+  </Paper>
+  </Grid>: null }</div>} </div>
       )
     }
 

@@ -1,4 +1,6 @@
 import React from 'react';
+import axios from 'axios';
+import jwt_decode from 'jwt-decode';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -18,23 +20,25 @@ import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import CarouselSlide from './Carousel/Carousel';
 import { useHistory } from "react-router-dom";
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import Slide from '@material-ui/core/Slide'
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 //Component Imports
 import  MainListItems from '../../components/shared/listItems';
+import './index.css';
+import Auth from '../../Auth';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
+
+
+
+function Arrow(props) {
+  const { direction, clickFunction } = props;
+  const icon = direction === 'left' ? <FaChevronLeft /> : <FaChevronRight />;
+
+  return <div onClick={clickFunction}>{icon}</div>;
 }
-
 
 const drawerWidth = 240;
 
@@ -56,7 +60,6 @@ const useStyles = makeStyles((theme) => ({
     ...theme.mixins.toolbar,
   },
   appBar: {
-
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
@@ -83,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
     // flexGrow: 1,
   },
   drawerPaper: {
-
+    // background: "linear-gradient(#e66465, #9198e5);",
     position: 'relative',
     whiteSpace: 'nowrap',
     width: drawerWidth,
@@ -129,14 +132,87 @@ const useStyles = makeStyles((theme) => ({
       padding: theme.spacing(10),
 
 paddingTop: theme.spacing(14),
-width:'100%'
-
+width:'100%',
+flexGrow: 1,
+height: '100vh',
+overflow: 'auto',
+flexGrow: 1,
+height: '100vh',
+overflow: 'auto',
   },
 }));
 
 export default function Home() {
   const classes = useStyles();
   let history = useHistory();
+  if(Auth.isAuthenticated()){
+    var decoded = jwt_decode(sessionStorage.getItem("token"));
+    var tokenExpiration = new Date(decoded.exp*1000);
+    var currentDate = new Date();
+    if(currentDate>tokenExpiration){
+      alert("Your session has expired.");
+      Auth.logout(()=>{sessionStorage.clear();history.push('/')});
+    }
+    }
+  const [movies, setMovies] = React.useState([]);
+
+    var SLIDE_INFO = [];
+
+if(Auth.isAuthenticated()){
+    axios.get("https://localhost:44343/api/movies")
+        .then(response => {
+            // console.log(response.data);
+            // movies(response.data);
+              var movies = response.data;
+              // movies.map((movie,index) => (
+              //   SLIDE_INFO.push({movieInfo:movie.PosterURL})
+              // ));
+              setMovies(response.data)
+        })
+        .catch(error=>{
+            error.log(error);
+        })
+      }
+      SLIDE_INFO=movies.slice();
+// console.log(SLIDE_INFO)
+  const [index, setIndex] = React.useState(0);
+  const content = SLIDE_INFO[index];
+  const numSlides = SLIDE_INFO.length;
+
+  const [slideIn, setSlideIn] = React.useState(true);
+  const [slideDirection, setSlideDirection] = React.useState('down');
+
+  const onArrowClick = (direction) => {
+      const increment = direction === 'left' ? -1 : 1;
+      const newIndex = (index + increment + numSlides) % numSlides;
+
+      const oppDirection = direction === 'left' ? 'right' : 'left';
+      setSlideDirection(direction);
+      setSlideIn(false);
+
+      setTimeout(() => {
+          setIndex(newIndex);
+          setSlideDirection(oppDirection);
+          setSlideIn(true);
+      }, 500);
+  };
+
+  React.useEffect(() => {
+      const handleKeyDown = (e) => {
+          if (e.keyCode === 39) {
+              onArrowClick('right');
+          }
+          if (e.keyCode === 37) {
+              onArrowClick('left');
+          }
+      };
+
+      window.addEventListener('keydown', handleKeyDown);
+
+      return () => {
+          window.removeEventListener('keydown', handleKeyDown);
+      };
+  });
   // console.log()
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -170,6 +246,17 @@ export default function Home() {
               <NotificationsIcon />
             </Badge>
           </IconButton> */}
+
+                    {/* <IconButton
+                    
+            color="inherit">
+          <AccountCircleIcon/> 
+          <Typography  component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+          {sessionStorage.getItem("UserName")}
+          </Typography>
+
+          </IconButton> */}
+
         </Toolbar>
       </AppBar>
 
@@ -187,12 +274,26 @@ export default function Home() {
           </IconButton>
         </div>
         <Divider />
-        <List><MainListItems/></List>
+        <List><MainListItems active={"Home"}/></List>
         {/* <Divider /> */}
         {/* <List>{secondaryListItems}</List> */}
       </Drawer>
       <span className={classes.InnerComponent}>
-      {/* <MovieHall path={history.location.pathname}/> */}
+      <div className='carouselSection'>
+            <Arrow
+                direction='left'
+                clickFunction={() => onArrowClick('left')}
+            />
+            <Slide in={slideIn} direction={slideDirection}>
+                <div>
+                    <CarouselSlide content={content} />
+                </div>
+            </Slide>
+            <Arrow
+                direction='right'
+                clickFunction={() => onArrowClick('right')}
+            />
+        </div>                
       </span>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />

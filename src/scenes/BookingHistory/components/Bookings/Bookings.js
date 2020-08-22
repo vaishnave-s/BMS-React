@@ -49,6 +49,7 @@ function createData(bookings) {
  
   }
 
+  if(Auth.isAuthenticated()){
 
 axios.get("https://localhost:44343/api/bookings/customer/"+sessionStorage.getItem("UserID"))
      .then(response => {
@@ -66,7 +67,7 @@ axios.get("https://localhost:44343/api/bookings/customer/"+sessionStorage.getIte
 
      });
 
-
+    }
 const useStyles = makeStyles({
   root: {
     width: '100%',

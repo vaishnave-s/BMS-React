@@ -7,6 +7,7 @@ class Auth{
         cb();
     }
     logout(cb){
+        console.log("logging out")
         this.authenticated = false;
         cb();
     }

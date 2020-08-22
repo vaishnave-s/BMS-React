@@ -119,7 +119,10 @@ const useStyles = makeStyles((theme) => ({
       padding: theme.spacing(10),
 
 paddingTop: theme.spacing(14),
-width:'100%'
+width:'100%',
+flexGrow: 1,
+height: '100vh',
+overflow: 'auto'
 
   },
 }));
@@ -176,12 +179,12 @@ export default function MovieHallMain() {
           </IconButton>
         </div>
         <Divider />
-        <List><MainListItems/></List>
+        <List><MainListItems active={"Movies"}/></List>
         {/* <Divider /> */}
         {/* <List>{secondaryListItems}</List> */}
       </Drawer>
       <span className={classes.InnerComponent}>
-      <MovieHall path={history.location.pathname}/>
+      <MovieHall history={history}/>
       </span>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />

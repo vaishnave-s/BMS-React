@@ -171,7 +171,7 @@ class SignUp extends Component {
                   color="primary"
                   className="submitButton"
                   onClick={this.handleSubmit}
-                  disabled={!((this.state.fullName||this.state.email||this.state.password) && (nameRegexp.test(this.state.fullName)) && (emailRegexp.test(this.state.email)))}
+                  disabled={!((this.state.fullName&&this.state.email&&this.state.password&&this.state.password!="") && (nameRegexp.test(this.state.fullName)) && (emailRegexp.test(this.state.email)))}
                 >
                   Sign Up
                 </Button>

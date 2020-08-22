@@ -11,8 +11,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import jwt_decode from 'jwt-decode';
-import Auth from '../../../../Auth';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import MuiAlert from '@material-ui/lab/Alert';
 
+import Auth from '../../../../Auth';
 import './AccountDetails.css';
 
 export default class AccountDetails extends React.Component {
@@ -37,7 +40,6 @@ export default class AccountDetails extends React.Component {
     handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
         //   this.setState( {isAvailable: true });  
-        console.log(this.state);
 
     }
 
@@ -58,21 +60,25 @@ export default class AccountDetails extends React.Component {
             });
         }
     }
-
+    snackbarClose = (e) =>{
+        this.setState({snackbaropen:false});
+      }
 
     onChangeAccountDetails=(e)=>
     {
         e.preventDefault();
         axios.put("https://localhost:44343/api/user/user/" + sessionStorage.getItem("UserID"),{
-            CustomerName:this.state.name,
+            CustomerName:this.state.name.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
             CustomerAddress:this.state.address,
             CustomerContact:this.state.number
         })
             .then(response => {
-                console.log(response.data);
                 // movies(response.data);
-                alert("Your details have been updated!");
-                 window.location.reload(true); 
+                this.setState({snackbaropen:true , snackbartype:"success",snackbarmsg : "Your details have been updated!"});
+                sessionStorage.setItem("UserName",this.state.name),
+                setTimeout(() => { 
+                window.location.reload(true); 
+                    }, 4000)
 
 
             })
@@ -82,20 +88,27 @@ export default class AccountDetails extends React.Component {
                 //  error.response.status==400?alert("There are no shows for this date."):null;
                 //  window.location.reload(true); 
                 //   }
-
+                e.response.status==500?(this.setState({snackbaropen:true , snackbartype:"error",snackbarmsg : "Something went wrong."}),
+                setTimeout(() => { 
+                window.location.reload(true); 
+                
+                }, 4000)):null;
             });
     }
     componentDidMount() {
-        console.log(this.props)
 if(Auth.isAuthenticated()){
 var decoded = jwt_decode(sessionStorage.getItem("token"));
 var tokenExpiration = new Date(decoded.exp*1000);
 var currentDate = new Date();
 if(currentDate>tokenExpiration){
-  alert("Your session has expired.");
-  Auth.logout(()=>{sessionStorage.clear();this.props.history.push('/')});
+    this.setState({snackbaropen:true , snackbartype:"warning",snackbarmsg : "Your session has expired."});
+    setTimeout(() => { 
+      Auth.logout(()=>{sessionStorage.clear();this.props.history.push('/')});
+    
+        }, 4000)
 }
-}
+else{
+
 
         axios.get("https://localhost:44343/api/user/user/" + sessionStorage.getItem("UserID"))
             .then(response => {
@@ -111,7 +124,6 @@ if(currentDate>tokenExpiration){
                     accountCreateDate: Date(response.data.AccountCreateDate).toString().split('GMT')[0].substring(0, 15),
                     rollbackCustomer:response.data
                 });
-                console.log(this.state);
 
             })
             .catch(error => {
@@ -122,6 +134,9 @@ if(currentDate>tokenExpiration){
                 //   }
 
             });
+}
+}
+
     }
     
     handleClickOpen = () => {
@@ -138,19 +153,22 @@ if(currentDate>tokenExpiration){
       email: sessionStorage.getItem("UserEmail")}
   } )  
   .then(json => {  
-    console.log(json);  
-    json.status==200?(alert("A password reset link has been sent!")
-    // ,window.location.reload(true)
+    json.status==200?(
+this.setState({snackbaropen:true , snackbartype:"success",snackbarmsg : "A password reset link has been sent!"}),
+setTimeout(() => { 
+    window.location.reload(true); 
+    
+    }, 4000)
     ):null;
 
     
   }).catch(e => {
     // console.log(e.response);
-    // e.response.status==400 && e.response.data.Message=="Invalid Credentials"?alert("Invalid credentials"):null;
-    e.response.status==400 && e.response.data.Message=="This user doesn't exist."?alert("This user doesn't exist!"):null;
-    // e.response.status==400 && e.response.data.Message=="User Not Verified"?alert("This user is not verified."):null;
-    // e.response.status!=400?alert("There was an error. Please try again."):null;
-    // window.location.reload(true); 
+    e?(this.setState({snackbaropen:true , snackbartype:"error",snackbarmsg : "Something went wrong."}),
+    setTimeout(() => { 
+    window.location.reload(true); 
+    
+    }, 4000)):null;
 
     }) 
 
@@ -159,7 +177,25 @@ if(currentDate>tokenExpiration){
     render() {
         return (
             <Container maxWidth="md" className="container">
-
+  <Snackbar 
+  anchorOrigin={{vertical:'top',horizontal:'right'}}
+  open = {this.state.snackbaropen}
+  autoHideDuration = {6000}
+  onClose={this.snackbarClose}
+  message = {<span id="message-id">{this.state.snackbarmsg}</span>}
+  action ={[
+    <IconButton 
+    key="close"
+    arial-label="close"
+    color="#FFFFFF"
+    onClick={this.snackbarClose}>
+    </IconButton>
+  ]}
+  >
+          <MuiAlert elevation={6} variant="filled" onClose={this.state.snackbaropen} severity={this.state.snackbartype}>
+  {this.state.snackbarmsg}
+</MuiAlert>
+</Snackbar>
                 <Grid item xs={12}>
                     <Paper className="paper" elevation={10}>
 
@@ -312,7 +348,7 @@ if(currentDate>tokenExpiration){
 
                                 <Button 
                                         disabled={(!(this.state.name && (/^[0-9+ ]*$/.test(this.state.number)) && (/^[a-z ,.'-]+$/i.test(this.state.name)) && (this.state.number!=""||this.state.address!="") && (this.state.name!=this.state.rollbackCustomer.CustomerName || 
-            this.state.number!=(!this.state.rollbackCustomer.CustomerContact||this.state.rollbackCustomer.CustomerContact=="" ? "None":this.state.rollbackCustomer.CustomerContact) || this.state.address!=(!this.state.rollbackCustomer.CustomerAddress||this.state.rollbackCustomer.CustomerAddress=="" ? "None":this.state.rollbackCustomer.CustomerAddress))))}
+                                            this.state.number!=(!this.state.rollbackCustomer.CustomerContact||this.state.rollbackCustomer.CustomerContact=="" ? "None":this.state.rollbackCustomer.CustomerContact) || this.state.address!=(!this.state.rollbackCustomer.CustomerAddress||this.state.rollbackCustomer.CustomerAddress=="" ? "None":this.state.rollbackCustomer.CustomerAddress))))}
 
                                 style={{ paddingTop: "0px", paddingBottom: "0px" }} variant="contained" size="small" color="primary"
                                 onClick={this.onChangeAccountDetails}

@@ -20,9 +20,9 @@ import Auth from '../../Auth';
 
 const useStyles = makeStyles({
   active: {
-    backgroundColor: "rgba(255, 0, 0, 0.2);",
+    backgroundColor: "rgb(207, 157, 148,0.8)",
     '&:hover': {
-    backgroundColor: "rgba(255, 0, 0, 0.2);",
+    backgroundColor: "rgb(207, 157, 148,0.8)",
     }
   },
 });
@@ -35,54 +35,60 @@ const MainListItems = (props) => {
   <div>
     <ListItem button
     className={props.active=="Home"?classes.active:null}
+    onClick={()=>{history.push('/home')}}
      >
       <ListItemIcon>
         <HomeIcon />
       </ListItemIcon>
       <ListItemText primary="Home" 
-      onClick={()=>{history.push('/home')}}
+     
       />
     </ListItem>
     <ListItem button
     className={props.active=="Movies"?classes.active:null}
+    onClick={()=>{history.push('/movies')}}
+
     >
       <ListItemIcon>
         <TheatersIcon />
       </ListItemIcon>
       <ListItemText primary="Movies" 
-      onClick={()=>{history.push('/movies')}}
 
       />
     </ListItem>
     <ListItem button
     className={props.active=="Booking History"?classes.active:null}
+    onClick={()=>{history.push('/bookinghistory')}}
+
     >
       <ListItemIcon>
         <BookIcon />
       </ListItemIcon>
       <ListItemText primary="Booking History" 
-      onClick={()=>{history.push('/bookinghistory')}}
 
       />
     </ListItem>
     <ListItem button
     className={props.active=="Account"?classes.active:null}
+    onClick={()=>{history.push('/account')}}
+
     >
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
       <ListItemText primary="Account" 
-      onClick={()=>{history.push('/account')}}
       />
     </ListItem>
     <ListItem button
     className={props.active=="Logout"?classes.active:null}
+    onClick={()=>{Auth.logout(()=>{sessionStorage.clear();history.push('/')})}}
+
     >
-      <ListItemIcon>
+      <ListItemIcon
+      >
         <ExitToAppIcon />
       </ListItemIcon>
       <ListItemText primary="Logout" 
-      onClick={()=>{Auth.logout(()=>{sessionStorage.clear();history.push('/')})}}
       /> 
       
     </ListItem>

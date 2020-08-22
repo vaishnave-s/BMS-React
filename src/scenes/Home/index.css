@@ -1,6 +1,7 @@
 .carouselSection {
     text-align: center;
     padding: 40px;
+    padding-top: 20px;
     display: flex;
     justify-content: center;
     align-items: center;

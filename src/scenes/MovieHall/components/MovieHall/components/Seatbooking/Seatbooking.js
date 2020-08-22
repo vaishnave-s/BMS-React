@@ -4,6 +4,9 @@ import {withRouter} from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+//Component imports
 import './Seatbooking.css';
 
 class Seatbooking extends React.Component {
@@ -16,7 +19,8 @@ class Seatbooking extends React.Component {
       seatSelected: [],
       seatReserved: [],
       confirmation: false,
-      showSeatReservation:true
+      showSeatReservation:true,
+      spinner:true
 
     }
     console.log(this.props);
@@ -36,9 +40,10 @@ class Seatbooking extends React.Component {
            // seats(response.data);
            console.log(response.data)
 
-           this.setState({seat:response.data.Seats});
-           this.setState({seatReserved:response.data.ReservedSeats});
-           console.log(this.state)
+           this.setState({seat:response.data.Seats,
+            seatReserved:response.data.ReservedSeats,
+            spinner:false});
+
 
 
        })
@@ -88,7 +93,6 @@ class Seatbooking extends React.Component {
   render() {
     return (
       <div>
-       
         <DrawGrid
           seat={ this.state.seat }
           available={ this.state.seatAvailable }
@@ -117,9 +121,8 @@ class DrawGrid extends React.Component {
   }
   
   confirmBooking(){
-    console.log(this.props)
+    this.setState({spinner:true})
 
-    console.log(this.state)
     axios.post('https://localhost:44343/api/booking',{
       CustomerID:sessionStorage.getItem("UserID"),
       ShowID:this.props.showInfo.selectedShow.ShowID,
@@ -133,6 +136,8 @@ class DrawGrid extends React.Component {
     console.log(json);  
 
   if(json.status===200){  
+this.setState({spinner:false})
+
     alert("Booking confirmed");  
   this.props.parentProps.history.push("/movies");  
   }  
@@ -158,6 +163,9 @@ handleChange(event) {
   render() {
     return (
       <div className="container">
+               {this.state.spinner?(    <div className="spinner">
+    <CircularProgress thickness="5" />
+  </div>):null}
          {this.props.showSeatReservation?<div>
           <h1>Seat Reservation System</h1>
         <h2></h2>
@@ -171,9 +179,10 @@ handleChange(event) {
             </tr>
           </tbody>
         </table>
-        <div style={{display:'flex',justifyContent:'center',alignItems:'center',marginTop:20}}>
+        <div style={{width:530,padding:'unset',display:'flex',justifyContent:'center',alignItems:'center',marginTop:20}}>
         <Button
         type="button"
+        fullWidth
                   variant="contained"
                   color="primary"
                   onClick={() => this.props.handleSubmited()}
@@ -182,14 +191,14 @@ handleChange(event) {
         <div>
       </div>
         </div>
-  :<div>{this.props.confirmation ? 
+  :<Grid item xs={13}>{this.props.confirmation ? 
     
-    <Grid item xs={13}>
-    <Paper className="paper" elevation={10}>
-  <div className="confirmationSection">
+    
+    <Paper className="paper confirmationSection" elevation={10}>
+  {/* <div className="confirmationSection"> */}
     
    
-    <h1>Confirmation</h1>
+    <h2>CONFIRMATION</h2>
   <div><label>Show date: {this.props.showInfo.selectedDate}</label></div>
   <div><label>Show time: {this.props.showInfo.selectedShow.ShowTime}</label></div>
   <div><label>Theatre: {this.props.showInfo.selectedShow.TheatreName}, {this.props.showInfo.selectedShow.TheatreLocation}</label></div>
@@ -207,20 +216,22 @@ handleChange(event) {
   </label>
   </div>
 
-  <div>
   <Button
         type="button"
                   variant="contained"
                   color="primary"
+                  fullWidth
                   onClick={() => this.confirmBooking()}
+                  style={{marginTop:10,padding:'unset',fontSize:12}}
+
                   disabled={!this.state.Transaction}
             >Confirm Booking</Button>
   
-  </div>
 
-  </div>
+  {/* </div> */}
   </Paper>
-  </Grid>: null }</div>} </div>
+  : null }</Grid>} 
+  </div>
       )
     }
 

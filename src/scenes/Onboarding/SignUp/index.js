@@ -11,9 +11,13 @@ import IconButton from '@material-ui/icons/Cancel';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import otherlogo from '../../../Assets/otherlogo.PNG';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 // import {withRouter} from 'react-router-dom';
 
 import './index.css';
@@ -26,9 +30,10 @@ class SignUp extends Component {
         fullName:null,
         email:null,
         password:null,
-        snackbaropen :false, snackbarmsg:'',
+        snackbaropen :false, snackbarmsg:'',snackbaropen:false,
         isAvailable:false,
         SubmissionStatus:false, 
+        spinner:false
         };  
         this.handleChange = this.handleChange.bind(this); 
       }  
@@ -38,6 +43,7 @@ class SignUp extends Component {
       
       RegisterUser=()=>{  
         console.log(this.state);  
+        this.setState({spinner:true})
 
         axios.post('https://localhost:44343/api/user/user',{
           CustomerName: this.state.fullName.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
@@ -45,14 +51,26 @@ class SignUp extends Component {
           CustomerPassword: this.state.password
       } )  
       .then(json => {  
-        console.log(json);  
-        json.status==200?alert("A verification link has been sent to your email."):null;
-        window.location.reload(true); 
+        this.setState({spinner:false})
+
+        json.status==200?this.setState({snackbaropen:true , snackbartype:"success",snackbarmsg : "A verification link has been sent to your email."}):null;
+        setTimeout(() => { 
+          window.location.reload(true); 
+          
+          }, 3000);
       }).catch(e => {
-        console.log(e.response);
-        e.response.status==400?alert("This email already exists!"):null;
-        e.response.status!=400?alert("There was an error. Please try again."):null;
-        window.location.reload(true); 
+        this.setState({spinner:false})
+
+        e.response.status==400?(this.setState({snackbaropen:true , snackbartype:"error",snackbarmsg : "This email already exists!"}),
+setTimeout(() => { 
+window.location.reload(true); 
+
+}, 3000)):null;
+e.response.status!=400?(this.setState({snackbaropen:true , snackbartype:"error",snackbarmsg : "Something went wrong."}),
+setTimeout(() => { 
+window.location.reload(true); 
+
+}, 3000)):null;
 
         })  
       }  
@@ -91,24 +109,35 @@ class SignUp extends Component {
             <Grid container component="main" className="root">
               
             <CssBaseline />
-            {/* <Snackbar 
-      anchorOrigin={{vertical:'bottom',horizontal:'right'}}
-      open = {this.state.snackbaropen}
-      autoHideDuration = {1500}
-      onClose={this.snackbarClose}
-      message = {<span id="message-id">{this.state.snackbarmsg}</span>}
-      action ={[
-      <IconButton 
-      key="close"
-      arial-label="close"
-      color="#FFFFFF"
-      onClick={this.snackbarClose}>
-      </IconButton>
-      ]}
-      /> */}
+            {this.state.spinner?(    <div className="spinner">
+    <CircularProgress thickness="5" />
+  </div>):null}
+
+  <Snackbar 
+  anchorOrigin={{vertical:'top',horizontal:'right'}}
+  open = {this.state.snackbaropen}
+  autoHideDuration = {6000}
+  onClose={this.snackbarClose}
+  message = {<span id="message-id">{this.state.snackbarmsg}</span>}
+  action ={[
+    <IconButton 
+    key="close"
+    arial-label="close"
+    color="#FFFFFF"
+    onClick={this.snackbarClose}>
+    </IconButton>
+  ]}
+  >
+          <MuiAlert elevation={6} variant="filled" onClose={this.state.snackbaropen} severity={this.state.snackbartype}>
+{this.state.snackbarmsg}
+</MuiAlert>
+</Snackbar>
             <Grid item xs={false} sm={4} md={7} className="image" />
             <Grid className="paperContainer" item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
               <div className="paper">
+                            <img 
+            // ,zIndex:30,width:'170px',height:'80px',position:"fixed",left:10
+          style={{padding:'unset',width:250,height:60}} src={otherlogo}></img>
               <Avatar className="avatar">
                 <LockOutlinedIcon />
               </Avatar>

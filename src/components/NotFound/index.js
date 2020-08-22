@@ -10,6 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import otherlogo from '../../Assets/otherlogo.PNG';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 // import {withRouter} from 'react-router-dom';
@@ -29,7 +30,10 @@ class NotFound extends Component {
         <Grid item xs={false} sm={4} md={7} className="image" />
         <Grid className="paperContainer" item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           <div className="paper">
-            <Avatar className="avatar"
+                          <img 
+            // ,zIndex:30,width:'170px',height:'80px',position:"fixed",left:10
+          style={{padding:'unset',width:250,height:60}} src={otherlogo}></img>
+              <Avatar className="avatar"
 
             >
               <LockOutlinedIcon />

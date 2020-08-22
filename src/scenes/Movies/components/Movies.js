@@ -17,6 +17,8 @@ import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import {withRouter} from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
+import CircularProgress from '@material-ui/core/CircularProgress';
+//Component imports
 import Auth from '../../../Auth';
 
 class MovieComponent extends Component {
@@ -25,7 +27,9 @@ class MovieComponent extends Component {
         this.state = {
           open: false,
           ID: null,
-          movies: []};  
+          movies: [],
+          spinner:true
+        };  
       }  
 
      componentDidMount(){
@@ -43,8 +47,8 @@ class MovieComponent extends Component {
             .then(response => {
                 // console.log(response.data);
                 // movies(response.data);
-                this.setState({movies:response.data});
-                console.log(response.data)
+                this.setState({movies:response.data,spinner:false});
+
 
             })
             .catch(error=>{
@@ -68,7 +72,9 @@ class MovieComponent extends Component {
 
     <div>
         <Container className="cardGrid" maxWidth="md">
-
+        {this.state.spinner?(    <div className="spinner">
+    <CircularProgress thickness="5" />
+  </div>):null}
         <Grid container spacing={4}>
     {this.state.movies.map((movie,index) => (
       <Grid item key={index} xs={7} sm={4} style = {{minWidth: "250px"}} >
@@ -92,10 +98,10 @@ class MovieComponent extends Component {
             </Typography> */}
           </CardContent>
           <CardActions>
-            <Button size="small" color="primary" onClick={this.handleOpen(movie.ID)}>
+            <Button style={{ flex: 1 }} size="small" variant="outlined" color="secondary" onClick={this.handleOpen(movie.ID)}>
               View
             </Button>
-            <Button size="small" color="primary" onClick={()=>this.props.history.push("/booking/"+String(movie.ID))}>
+            <Button style={{ flex: 1 }} size="small" variant="outlined" color="primary" onClick={()=>this.props.history.push("/booking/"+String(movie.ID))}>
             {/* onClick={this.props.history.push("/booking/"+String(movie.ID))} */}
               Book
             </Button>

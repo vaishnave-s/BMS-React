@@ -19,8 +19,10 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { useHistory } from "react-router-dom";
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 //Component Imports
-import { MovieHall } from './components/MovieHall/MovieHall';
+import BG from '../../Assets/BGNav.jpg';
+import logo from '../../Assets/logo2.PNG';import { MovieHall } from './components/MovieHall/MovieHall';
 import  MainListItems from '../../components/shared/listItems';
 
 
@@ -34,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
   toolbar: {
     paddingRight:24, // keep right padding when drawer closed
-    backgroundColor:'#3f50b5',
+    backgroundColor:'#3d8792',
     position: 'fixed',
     width:'100%'
   },
@@ -73,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
     // flexGrow: 1,
   },
   drawerPaper: {
-
+    background: "url(" + BG + ")",
     position: 'relative',
     whiteSpace: 'nowrap',
     width: drawerWidth,
@@ -117,7 +119,7 @@ const useStyles = makeStyles((theme) => ({
   },
   InnerComponent: {
       padding: theme.spacing(10),
-
+backgroundColor:'#eeeeee',
 paddingTop: theme.spacing(14),
 width:'100%',
 flexGrow: 1,
@@ -163,7 +165,20 @@ export default function MovieHallMain() {
               <NotificationsIcon />
             </Badge>
           </IconButton> */}
-        </Toolbar>
+                            <IconButton
+                    disableRipple
+                    disableFocusRipple
+            color="inherit"   
+            style={{position:"fixed",right:15}}
+            onClick={()=>{history.push("/account")}}
+            >
+          <AccountCircleIcon fontSize="large" style={{marginRight:10}}/> 
+          <Typography  component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+          {sessionStorage.getItem("UserName")}
+          </Typography>
+
+          </IconButton>
+</Toolbar>
       </AppBar>
 
       <Drawer
@@ -174,6 +189,9 @@ export default function MovieHallMain() {
         open={open}
       >
         <div className={classes.toolbarIcon}>
+          <img 
+            onClick={()=>{history.push("/home")}}
+          style={{opacity:'0.9',cursor:'pointer',zIndex:30,width:'170px',height:'80px',position:"fixed",left:10}} src={logo}></img>
           <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
           </IconButton>

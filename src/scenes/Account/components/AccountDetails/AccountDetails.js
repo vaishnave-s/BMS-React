@@ -14,7 +14,8 @@ import jwt_decode from 'jwt-decode';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import MuiAlert from '@material-ui/lab/Alert';
-
+import CircularProgress from '@material-ui/core/CircularProgress';
+//Component imports
 import Auth from '../../../../Auth';
 import './AccountDetails.css';
 
@@ -33,6 +34,7 @@ export default class AccountDetails extends React.Component {
             address: null,
             accountCreateDate: null,
             edit: false,
+            spinner:true
 
         }
         this.handleChange = this.handleChange.bind(this);
@@ -67,6 +69,8 @@ export default class AccountDetails extends React.Component {
     onChangeAccountDetails=(e)=>
     {
         e.preventDefault();
+    this.setState({spinner:true})
+
         axios.put("https://localhost:44343/api/user/user/" + sessionStorage.getItem("UserID"),{
             CustomerName:this.state.name.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
             CustomerAddress:this.state.address,
@@ -74,15 +78,17 @@ export default class AccountDetails extends React.Component {
         })
             .then(response => {
                 // movies(response.data);
-                this.setState({snackbaropen:true , snackbartype:"success",snackbarmsg : "Your details have been updated!"});
+                this.setState({spinner:false,snackbaropen:true , snackbartype:"success",snackbarmsg : "Your details have been updated!"});
                 sessionStorage.setItem("UserName",this.state.name),
                 setTimeout(() => { 
                 window.location.reload(true); 
-                    }, 4000)
+                    }, 2000)
 
 
             })
             .catch(error => {
+        this.setState({spinner:false})
+
                 console.log('error', error)
                 //   if(error){
                 //  error.response.status==400?alert("There are no shows for this date."):null;
@@ -124,9 +130,13 @@ else{
                     accountCreateDate: Date(response.data.AccountCreateDate).toString().split('GMT')[0].substring(0, 15),
                     rollbackCustomer:response.data
                 });
+                this.setState({spinner:false})
+
 
             })
             .catch(error => {
+        this.setState({spinner:false})
+
                 console.log('error', error)
                 //   if(error){
                 //  error.response.status==400?alert("There are no shows for this date."):null;
@@ -147,23 +157,25 @@ else{
 
   };
   changePassword = () => {
-    this.setState({setOpen:false})
+    this.setState({setOpen:false,spinner:true})
     
     axios.post('https://localhost:44343/api/authentication/forgotpassword',null,{params:{
       email: sessionStorage.getItem("UserEmail")}
   } )  
   .then(json => {  
     json.status==200?(
-this.setState({snackbaropen:true , snackbartype:"success",snackbarmsg : "A password reset link has been sent!"}),
+this.setState({spinner:false,snackbaropen:true , snackbartype:"success",snackbarmsg : "A password reset link has been sent!"}),
 setTimeout(() => { 
     window.location.reload(true); 
     
-    }, 4000)
+    }, 2000)
     ):null;
 
     
   }).catch(e => {
     // console.log(e.response);
+    this.setState({spinner:false})
+
     e?(this.setState({snackbaropen:true , snackbartype:"error",snackbarmsg : "Something went wrong."}),
     setTimeout(() => { 
     window.location.reload(true); 
@@ -177,6 +189,10 @@ setTimeout(() => {
     render() {
         return (
             <Container maxWidth="md" className="container">
+                {this.state.spinner?(    <div className="spinner">
+    <CircularProgress thickness="5" />
+  </div>):null}
+
   <Snackbar 
   anchorOrigin={{vertical:'top',horizontal:'right'}}
   open = {this.state.snackbaropen}
@@ -304,7 +320,9 @@ setTimeout(() => {
                             </Grid>
 
                         </Grid>
-                        <Grid container>
+                        <Grid   justify="space-between" // Add it here :)
+      container 
+      spacing={24}>
                             <Grid item xs={this.state.edit ? 6 : 10}>
 
                                 <Button onClick={this.handleClickOpen} style={{ paddingTop: "0px", paddingBottom: "0px" }} variant="contained" size="small" color="secondary"
@@ -325,10 +343,10 @@ setTimeout(() => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleClose} color="primary">
+          <Button variant="outlined" onClick={this.handleClose} color="secondary">
             Cancel
           </Button>
-          <Button onClick={this.changePassword} color="primary" autoFocus>
+          <Button variant="outlined" onClick={this.changePassword} color="primary" autoFocus>
             Confirm
           </Button>
         </DialogActions>
@@ -344,11 +362,15 @@ setTimeout(() => {
                                     {this.state.edit ? "Cancel" : "Edit"}
                                 </Button>
                             </Grid>
-                            {this.state.edit ? (<Grid item style={{ marginLeft: "20px" }}>
+                            {this.state.edit ? (<Grid item>
 
                                 <Button 
-                                        disabled={(!(this.state.name && (/^[0-9+ ]*$/.test(this.state.number)) && (/^[a-z ,.'-]+$/i.test(this.state.name)) && (this.state.number!=""||this.state.address!="") && (this.state.name!=this.state.rollbackCustomer.CustomerName || 
-                                            this.state.number!=(!this.state.rollbackCustomer.CustomerContact||this.state.rollbackCustomer.CustomerContact=="" ? "None":this.state.rollbackCustomer.CustomerContact) || this.state.address!=(!this.state.rollbackCustomer.CustomerAddress||this.state.rollbackCustomer.CustomerAddress=="" ? "None":this.state.rollbackCustomer.CustomerAddress))))}
+                                        disabled={(!(this.state.name && 
+                                            (/^[a-z ,.'-]+$/i.test(this.state.name)) && 
+                                            (this.state.number!=""?(/^[0-9+ ]*$/.test(this.state.number)):null ||this.state.address!="") && 
+                                            (this.state.name!=this.state.rollbackCustomer.CustomerName || 
+                                            this.state.number!=(this.state.rollbackCustomer.CustomerContact=="" ? "None":this.state.rollbackCustomer.CustomerContact) || 
+                                                this.state.address!=(this.state.rollbackCustomer.CustomerAddress=="" ? "None":this.state.rollbackCustomer.CustomerAddress))))}
 
                                 style={{ paddingTop: "0px", paddingBottom: "0px" }} variant="contained" size="small" color="primary"
                                 onClick={this.onChangeAccountDetails}

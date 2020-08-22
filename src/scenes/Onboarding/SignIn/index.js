@@ -19,6 +19,7 @@ import CloseIcon from '@material-ui/icons/Close';
 // import {withRouter} from 'react-router-dom';
 import './index.css';
 import Auth from '../../../Auth';
+import otherlogo from '../../../Assets/otherlogo.PNG';
 
 class SignIn extends Component {
   constructor(props) { 
@@ -54,7 +55,7 @@ sessionStorage.setItem("isAdmin",json.data.Customer.isAdmin==false?0:1)):null;
 this.setState({snackbaropen:true , snackbartype:"success",snackbarmsg : "Welcome back, "+json.data.Customer.CustomerName+" !"});
 setTimeout(() => { 
 Auth.login(()=>{this.props.history.push("/home")})
-}, 5000)
+}, 2000)
 
   }).catch(e => {
     console.log(e.response);
@@ -117,9 +118,13 @@ Auth.login(()=>{this.props.history.push("/home")})
             <Grid item xs={false} sm={4} md={7} className="image" />
             <Grid className="paperContainer" item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
               <div className="paper">
+              <img 
+            // ,zIndex:30,width:'170px',height:'80px',position:"fixed",left:10
+          style={{padding:'unset',width:250,height:60}} src={otherlogo}></img>
               <Avatar className="avatar"
               
               >
+
                 <LockOutlinedIcon />
               </Avatar>
               <Typography component="h1" variant="h5">

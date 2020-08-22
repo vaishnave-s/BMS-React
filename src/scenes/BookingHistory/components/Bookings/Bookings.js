@@ -10,9 +10,10 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
-import Auth from '../../../../Auth';
 import { useHistory } from "react-router-dom";
-
+import CircularProgress from '@material-ui/core/CircularProgress';
+//Component imports
+import Auth from '../../../../Auth';
 
 const columns = [
   { id: 'bookingDate', label: 'Booking Date', minWidth: 170 },
@@ -27,12 +28,11 @@ const columns = [
 ];
 var rows = [{bookingDate:"",movieName:"",showDate:"",showTime:"",confirmedSeats:"NO RECORDS",
 theatre:"",paymentAmount:"",transactionMode:""}];
-var isPresent = false;
 function createData(bookings) {
-  if(bookings){
+  if(bookings.length!==0){
     rows.length=0;
-      bookings.map((booking,index) => {
-        var bookingDate=Date(booking.BookingVM.BookingDate).toString().split('GMT')[0];
+      bookings.reverse().map((booking,index) => {
+        var bookingDate=new Date(Date.parse(booking.BookingVM.BookingDate)).toString().split('GMT')[0].slice(0,-4);
         var movieName=booking.MovieVM.Name;
         var showDate=booking.BookingVM.ShowDate.slice(0,10);
         var showTime=booking.ShowTime.slice(0,5);
@@ -44,41 +44,28 @@ function createData(bookings) {
         rows.push(bookingObj);
       }
     );
-    isPresent=true;
   }
  
   }
 
-  if(Auth.isAuthenticated()){
-
-axios.get("https://localhost:44343/api/bookings/customer/"+sessionStorage.getItem("UserID"))
-     .then(response => {
-         // console.log(response.data);
-         // movies(response.data);
-        //  this.setState({shows:response.data});
-         createData(response.data);
-     })
-     .catch( error=>{
-         console.log('error', error)
-        //   if(error){
-        //  error.response.status==400?alert("There are no shows for this date."):null;
-        //  window.location.reload(true); 
-        //   }
-
-     });
-
-    }
 const useStyles = makeStyles({
   root: {
     width: '100%',
   },
   container: {
-    maxHeight: 440,
+    maxHeight: 400,
   },
+  spinner: {
+    display: 'flex',
+    position:'absolute',
+    left:'50%',
+    top:'50%',
+  zIndex:10},
 });
 
 export default function StickyHeadTable() {
 let history = useHistory();
+const [spinner, isLoading] = React.useState(true);
 
 if(Auth.isAuthenticated()){
   var decoded = jwt_decode(sessionStorage.getItem("token"));
@@ -87,6 +74,27 @@ if(Auth.isAuthenticated()){
   if(currentDate>tokenExpiration){
     alert("Your session has expired.");
     Auth.logout(()=>{sessionStorage.clear();history.push('/')});
+  }
+  else{
+    
+
+    axios.get("https://localhost:44343/api/bookings/customer/"+sessionStorage.getItem("UserID"))
+         .then(response => {
+             // console.log(response.data);
+             // movies(response.data);
+            //  this.setState({shows:response.data});
+             createData(response.data);
+             isLoading(false);
+    
+         })
+         .catch( error=>{
+             console.log('error', error)
+            //   if(error){
+            //  error.response.status==400?alert("There are no shows for this date."):null;
+            //  window.location.reload(true); 
+            //   }
+    
+         });
   }
   }
   const classes = useStyles();
@@ -104,6 +112,9 @@ if(Auth.isAuthenticated()){
 
   return (
     <Paper className={classes.root} elevation={10}>
+      {spinner?(    <div className={classes.spinner}>
+    <CircularProgress thickness="5" />
+  </div>):null}
       <TableContainer className={classes.container}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>

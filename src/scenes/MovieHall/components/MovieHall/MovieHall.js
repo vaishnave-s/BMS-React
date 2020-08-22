@@ -4,10 +4,10 @@ import jwt_decode from 'jwt-decode';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
-
-import Auth from '../../../../Auth';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 //Component Imports
+import Auth from '../../../../Auth';
 import './MovieHall.css';
 import Seatbooking from './components/Seatbooking/Seatbooking';
 
@@ -20,7 +20,8 @@ export class MovieHall extends Component {
       selectedShow: null,
       shows: [],
       book: false,
-      displayShows: false
+      displayShows: false,
+      spinner:false
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -57,6 +58,7 @@ export class MovieHall extends Component {
         Auth.logout(() => { sessionStorage.clear(); this.props.history.push('/') });
       }
       else{
+this.setState({spinner:true})
     axios.get("https://localhost:44343/api/show", {
       params: {
         MovieID: parseInt(this.props.history.location.pathname.substring(this.props.history.location.pathname.lastIndexOf('/') + 1)),
@@ -66,7 +68,7 @@ export class MovieHall extends Component {
       .then(response => {
         // console.log(response.data);
         // movies(response.data);
-        this.setState({ shows: response.data });
+        this.setState({ shows: response.data,spinner:false });
 
       })
       .catch(error => {
@@ -91,6 +93,9 @@ export class MovieHall extends Component {
     return (
       <span style={{ padding: '1rem' }}>
 
+{this.state.spinner?(    <div className="spinner">
+    <CircularProgress thickness="5" />
+  </div>):null}
         <Grid item xs={12}>
           <Paper className="paper" elevation={10}>
             <div className="container form">
@@ -102,15 +107,20 @@ export class MovieHall extends Component {
                     Date:
             {/* </label> */}
                   <input type="date" name="date" min={new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }).substring(0, 10)} defaultValue={new Date().toISOString().substring(0, 10)} required onChange={this.handleChange} />
+                  
                   <Button
+                  fullWidth
+
                   variant="contained"
                   color="secondary"
-                  // disabled={Date(this.state.date)<(new Date())}
+                  style={{width:510,marginTop:10,padding:'unset',fontSize:12}}
+                  disabled={new Date(Date.parse(this.state.date))<(new Date())}
                   onClick={this.handleDisplayShows} type="button" 
             >Display shows</Button>
                 </div>
+                
 
-                {this.state.displayShows ? <div>
+                {this.state.displayShows ? <div className="form-group">
                     {/* <label> */}
                       Shows:
             <select className="custom-select mb-2 mr-sm-2 mb-sm-0" name="selectedShow" onChange={this.handleChange}>
@@ -120,24 +130,27 @@ export class MovieHall extends Component {
                           // <option value={String(show.ShowID)}>{show.ShowTime}</option>
                           <option
                             value={String(show.ShowID)}
-                        >{show.ShowTime} - {show.MovieHallType} (Rs {show.Price}) @ {show.TheatreName}</option>
+                        >{show.ShowTime.slice(0,-3)} - {show.MovieHallType} (Rs {show.Price}) @ {show.TheatreName} - [{show.UnreservedSeatsCount} seat(s) left]</option>
 
                         ))}
                       </select>
                     {/* </label> */}
-                  <div>
+                  {/* <div> */}
                     {this.state.selectedShow ? (                  <Button
                   fullWidth
                   variant="contained"
                   color="secondary"
                   type="submit" 
+                  style={{width:510,marginTop:10,padding:'unset',fontSize:12}}
 
             >Select seats</Button>
                 ) : null}
 
 
-                  </div>
-                </div> : null}
+                  {/* </div> */}
+                  </div> : null}
+                
+
               </form>
             </div>
 

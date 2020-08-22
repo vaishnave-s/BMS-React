@@ -24,13 +24,14 @@ import CarouselSlide from './Carousel/Carousel';
 import { useHistory } from "react-router-dom";
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import Slide from '@material-ui/core/Slide'
+import CircularProgress from '@material-ui/core/CircularProgress';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 //Component Imports
 import  MainListItems from '../../components/shared/listItems';
 import './index.css';
 import Auth from '../../Auth';
-
-
+import BG from '../../Assets/BGNav.jpg';
+import logo from '../../Assets/logo2.PNG';
 
 
 function Arrow(props) {
@@ -48,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
   toolbar: {
     paddingRight:24, // keep right padding when drawer closed
-    backgroundColor:'#3f50b5',
+    backgroundColor:'#3d8792',
     position: 'fixed',
     width:'100%'
   },
@@ -86,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
     // flexGrow: 1,
   },
   drawerPaper: {
-    // background: "linear-gradient(#e66465, #9198e5);",
+    background: "url(" + BG + ")",
     position: 'relative',
     whiteSpace: 'nowrap',
     width: drawerWidth,
@@ -130,21 +131,29 @@ const useStyles = makeStyles((theme) => ({
   },
   InnerComponent: {
       padding: theme.spacing(10),
-
+backgroundColor:'#eeeeee',
 paddingTop: theme.spacing(14),
 width:'100%',
 flexGrow: 1,
 height: '100vh',
-overflow: 'auto',
-flexGrow: 1,
-height: '100vh',
-overflow: 'auto',
+overflowY: 'hidden',
   },
+  spinner: {
+    display: 'flex',
+    position:'absolute',
+    left:'50%',
+    top:'50%',
+  zIndex:10},
+  nowShowingHeading:{
+    fontSize:22,
+    fontWeight: 'bold'
+  }
 }));
 
 export default function Home() {
   const classes = useStyles();
   let history = useHistory();
+  const [spinner, isLoading] = React.useState(true);
   if(Auth.isAuthenticated()){
     var decoded = jwt_decode(sessionStorage.getItem("token"));
     var tokenExpiration = new Date(decoded.exp*1000);
@@ -168,6 +177,7 @@ if(Auth.isAuthenticated()){
               //   SLIDE_INFO.push({movieInfo:movie.PosterURL})
               // ));
               setMovies(response.data)
+              isLoading(false);
         })
         .catch(error=>{
             error.log(error);
@@ -226,7 +236,9 @@ if(Auth.isAuthenticated()){
   return (
     <div className={classes.root}>
       <CssBaseline />
-
+      {spinner?(    <div className={classes.spinner}>
+    <CircularProgress thickness="5" />
+  </div>):null}
       <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
         <Toolbar className={classes.toolbar}>
           <IconButton
@@ -247,15 +259,20 @@ if(Auth.isAuthenticated()){
             </Badge>
           </IconButton> */}
 
-                    {/* <IconButton
-                    
-            color="inherit">
-          <AccountCircleIcon/> 
+                    <IconButton
+                    disableRipple
+                    disableFocusRipple
+            color="inherit"   
+            style={{position:"fixed",right:15}}
+            onClick={()=>{history.push("/account")}}
+            >
+          <AccountCircleIcon fontSize="large" style={{marginRight:10}}/> 
           <Typography  component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
           {sessionStorage.getItem("UserName")}
           </Typography>
 
-          </IconButton> */}
+          </IconButton>
+          
 
         </Toolbar>
       </AppBar>
@@ -269,6 +286,9 @@ if(Auth.isAuthenticated()){
         open={open}
       >
         <div className={classes.toolbarIcon}>
+          <img 
+            onClick={()=>{history.push("/home")}}
+          style={{opacity:'0.9',cursor:'pointer',zIndex:30,width:'170px',height:'80px',position:"fixed",left:10}} src={logo}></img>
           <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
           </IconButton>
@@ -279,6 +299,9 @@ if(Auth.isAuthenticated()){
         {/* <List>{secondaryListItems}</List> */}
       </Drawer>
       <span className={classes.InnerComponent}>
+      <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.nowShowingHeading}>
+           NOW SHOWING
+          </Typography>
       <div className='carouselSection'>
             <Arrow
                 direction='left'

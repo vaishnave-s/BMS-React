@@ -28,7 +28,9 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    
+    overflow-y: scroll !important;
+    max-height:550px
+
   }
   
   .modalImage{
@@ -39,3 +41,11 @@
     margin-right: auto;
 
   }
+
+  
+  .spinner{
+    display: flex;
+    position:absolute;
+    left:50%;
+    top:50%;
+  z-index:10}

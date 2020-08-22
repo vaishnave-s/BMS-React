@@ -22,7 +22,8 @@
   }
     .avatar{
       margin: 10px;
-      background-color: #ed4b82 !important;
+         background-color: #ed4b82 !important;
+      opacity:0.7
     }
     .formClass{
       width: 100%; 
@@ -33,3 +34,9 @@
   justify-content: center;
   align-items: center;
 }
+.spinner{
+  display: flex;
+  position:absolute;
+  left:50%;
+  top:50%;
+z-index:10}

@@ -50,3 +50,10 @@
     /* margin:10px; */
     /* display: inline-block; */
 }
+
+.spinner{
+  display: flex;
+  position:absolute;
+  left:50%;
+  top:50%;
+z-index:10}

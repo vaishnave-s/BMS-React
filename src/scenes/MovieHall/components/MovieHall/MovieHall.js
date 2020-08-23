@@ -87,11 +87,13 @@ this.setState({spinner:true})
 
       })
       .catch(error => {
-        console.log('error', error)
-        // if (error) {
-        //   error.response.status == 400 ? alert("There are no shows for this date.") : null;
-        //   window.location.reload(true);
-        // }
+        this.setState({spinner:false });
+          error.response.status == 400 ? (this.setState({snackbaropen:true , snackbartype:"error",snackbarmsg : "There are no shows for this request.",displayShows:false})): null;
+          error.response.status != 400 ? (this.setState({snackbaropen:true , snackbartype:"error",snackbarmsg : "Something went wrong."}),setTimeout(() => { 
+            window.location.reload(true); 
+            
+            }, 2000)): null;
+          
 
       })
     }

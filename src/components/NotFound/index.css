@@ -5,11 +5,11 @@
   }
   .image{
 
-    /* background-image: url("./hallImage.jpg"); */
+    background-image: url("../../Assets/BG.jpg");
     background-repeat: no-repeat;
-    background-color:red;
-    background-size: cover;
+    background-color:#3d8792;
     background-position: center;
+    background-position: cover;
   }
   .paper{
     margin: 30px;

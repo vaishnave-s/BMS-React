@@ -6,9 +6,9 @@
   .image{
 
     background-image: url("../../../Assets/BG.jpg");
-    /* background-repeat: no-repeat; */
+    background-repeat: no-repeat;
     background-color:#3d8792;
-    /* background-size: cover; */
+    background-size: cover;
     background-position: center;
   }
   .paper{

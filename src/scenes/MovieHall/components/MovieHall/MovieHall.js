@@ -5,7 +5,9 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import MuiAlert from '@material-ui/lab/Alert';
 //Component Imports
 import Auth from '../../../../Auth';
 import './MovieHall.css';
@@ -27,6 +29,9 @@ export class MovieHall extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  snackbarClose = (e) =>{
+    this.setState({snackbaropen:false});
+  }
 
   handleChange(event) {
     const target = event.target;
@@ -54,7 +59,8 @@ export class MovieHall extends Component {
       var tokenExpiration = new Date(decoded.exp * 1000);
       var currentDate = new Date();
       if (currentDate > tokenExpiration) {
-        alert("Your session has expired.");
+this.setState({snackbaropen:true , snackbartype:"warning",snackbarmsg : "Your session has expired."});
+
         Auth.logout(() => { sessionStorage.clear(); this.props.history.push('/') });
       }
       else{
@@ -96,6 +102,25 @@ this.setState({spinner:true})
 {this.state.spinner?(    <div className="spinner">
     <CircularProgress thickness="5" />
   </div>):null}
+  <Snackbar 
+  anchorOrigin={{vertical:'top',horizontal:'right'}}
+  open = {this.state.snackbaropen}
+  autoHideDuration = {6000}
+  onClose={this.snackbarClose}
+  message = {<span id="message-id">{this.state.snackbarmsg}</span>}
+  action ={[
+    <IconButton 
+    key="close"
+    arial-label="close"
+    color="#FFFFFF"
+    onClick={this.snackbarClose}>
+    </IconButton>
+  ]}
+  >
+          <MuiAlert elevation={6} variant="filled" onClose={this.state.snackbaropen} severity={this.state.snackbartype}>
+{this.state.snackbarmsg}
+</MuiAlert>
+</Snackbar>
         <Grid item xs={12}>
           <Paper className="paper" elevation={10}>
             <div className="container form">

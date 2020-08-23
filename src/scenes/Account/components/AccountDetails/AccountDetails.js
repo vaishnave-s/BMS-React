@@ -229,7 +229,9 @@ setTimeout(() => {
                             <Grid item xs={14}>
 
                                 <label>Name:
-
+                                    <div
+                                        style={{margin:'unset'}}
+                                    >
                                     <TextField
                                         variant={this.state.variantField}
                                         disabled={this.state.disabledField}
@@ -238,11 +240,13 @@ setTimeout(() => {
                                         // label="Password"
                                         type="text"
                                         id="name"
+                                        style={{width:380}}
                                         value={this.state.name}
                                         onChange={this.handleChange}
                                         error={!/^[a-z ,.'-]+$/i.test(this.state.name)}
                                         helperText={!/^[a-z ,.'-]+$/i.test(this.state.name)?"Enter a valid name.":null}
                                     />
+                                    </div>
                                 </label>
 
                             </Grid>
@@ -252,11 +256,15 @@ setTimeout(() => {
                             <Grid item xs={14}>
 
                                 <label>Email address:
-
+                                <div
+                                        style={{margin:'unset'}}
+                                    >
                                     <TextField
                                         variant="filled"
                                         disabled={true}
                                         fullWidth
+                                        style={{width:380}}
+
                                         name="email"
                                         // label="Password"
                                         type="text"
@@ -264,6 +272,7 @@ setTimeout(() => {
                                         value={this.state.email}
 
                                     />
+                                    </div>
                                 </label>
 
                             </Grid>
@@ -273,8 +282,11 @@ setTimeout(() => {
                             <Grid item xs={14}>
 
                                 <label>Address:
-
+<div
+                                        style={{margin:'unset'}}
+>
                                     <TextField
+                                        style={{width:380}}
                                         variant={this.state.variantField}
                                         disabled={this.state.disabledField}
                                         fullWidth
@@ -289,6 +301,7 @@ setTimeout(() => {
                                         onChange={this.handleChange}
 
                                     />
+                                    </div>
                                 </label>
 
                             </Grid>
@@ -299,8 +312,11 @@ setTimeout(() => {
                             <Grid item xs={14}>
 
                                 <label>Contact number:
-
+                                    <div
+                                        style={{margin:'unset'}}
+                                    >
                                     <TextField
+                                        style={{width:380}}
                                         variant={this.state.variantField}
                                         disabled={this.state.disabledField}
                                         fullWidth
@@ -315,6 +331,7 @@ setTimeout(() => {
                                         helperText={(this.state.number!="None"?(!(/^[0-9+ ]*$/.test(this.state.number))):null)?"Enter a valid contact number.":null}
                                     
                                     />
+                                    </div>
                                 </label>
 
                             </Grid>
@@ -346,7 +363,7 @@ setTimeout(() => {
           <Button variant="outlined" onClick={this.handleClose} color="secondary">
             Cancel
           </Button>
-          <Button variant="outlined" onClick={this.changePassword} color="primary" autoFocus>
+          <Button variant="contained" onClick={this.changePassword} color="primary" autoFocus>
             Confirm
           </Button>
         </DialogActions>

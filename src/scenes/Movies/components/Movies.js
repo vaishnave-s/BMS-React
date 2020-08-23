@@ -130,7 +130,7 @@ this.setState({snackbaropen:true , snackbartype:"warning",snackbarmsg : "Your se
             <Button style={{ flex: 1 }} size="small" variant="outlined" color="secondary" onClick={this.handleOpen(movie.ID)}>
               View
             </Button>
-            <Button style={{ flex: 1 }} size="small" variant="outlined" color="primary" onClick={()=>this.props.history.push("/booking/"+String(movie.ID))}>
+            <Button style={{ flex: 1 }} size="small" variant="contained" color="primary" onClick={()=>this.props.history.push("/booking/"+String(movie.ID))}>
             {/* onClick={this.props.history.push("/booking/"+String(movie.ID))} */}
               Book
             </Button>

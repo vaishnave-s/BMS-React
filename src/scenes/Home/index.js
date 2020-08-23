@@ -154,15 +154,15 @@ export default function Home() {
   const classes = useStyles();
   let history = useHistory();
   const [spinner, isLoading] = React.useState(true);
-  if(Auth.isAuthenticated()){
-    var decoded = jwt_decode(sessionStorage.getItem("token"));
-    var tokenExpiration = new Date(decoded.exp*1000);
-    var currentDate = new Date();
-    if(currentDate>tokenExpiration){
-      alert("Your session has expired.");
-      Auth.logout(()=>{sessionStorage.clear();history.push('/')});
-    }
-    }
+  // if(Auth.isAuthenticated()){
+  //   var decoded = jwt_decode(sessionStorage.getItem("token"));
+  //   var tokenExpiration = new Date(decoded.exp*1000);
+  //   var currentDate = new Date();
+  //   if(currentDate>tokenExpiration){
+  //     alert("Your session has expired.");
+  //     Auth.logout(()=>{sessionStorage.clear();history.push('/')});
+  //   }
+  //   }
   const [movies, setMovies] = React.useState([]);
 
     var SLIDE_INFO = [];

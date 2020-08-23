@@ -132,14 +132,14 @@ this.setState({spinner:true})
                     Date:
             {/* </label> */}
                   <input type="date" name="date" min={new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }).substring(0, 10)} defaultValue={new Date().toISOString().substring(0, 10)} required onChange={this.handleChange} />
-                  
+
                   <Button
                   fullWidth
 
                   variant="contained"
                   color="secondary"
                   style={{width:510,marginTop:10,padding:'unset',fontSize:12}}
-                  disabled={new Date(Date.parse(this.state.date))<(new Date())}
+                  disabled={new Date(Date.parse(this.state.date)).getDate()<(new Date().getDate())}
                   onClick={this.handleDisplayShows} type="button" 
             >Display shows</Button>
                 </div>

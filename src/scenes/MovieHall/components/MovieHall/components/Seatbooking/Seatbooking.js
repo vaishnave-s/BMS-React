@@ -25,6 +25,7 @@ class Seatbooking extends React.Component {
       showSeatReservation:true,
       spinner:true,
       snackbaropen :false, snackbarmsg:'',snackbaropen:false,
+      confirmBtnClickOnce:false,
 
 
     }
@@ -128,7 +129,7 @@ class DrawGrid extends React.Component {
   }
   
   confirmBooking(){
-    this.setState({spinner:true})
+    this.setState({confirmBtnClickOnce:true,spinner:true})
 
     axios.post('https://localhost:44343/api/booking',{
       CustomerID:sessionStorage.getItem("UserID"),
@@ -254,7 +255,7 @@ handleChange(event) {
                   onClick={() => this.confirmBooking()}
                   style={{marginTop:10,padding:'unset',fontSize:12}}
 
-                  disabled={!this.state.Transaction}
+                  disabled={!this.state.Transaction || this.state.confirmBtnClickOnce}
             >Confirm Booking</Button>
   
 

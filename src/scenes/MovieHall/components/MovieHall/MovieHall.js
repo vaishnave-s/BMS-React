@@ -50,6 +50,7 @@ export class MovieHall extends Component {
 
   }
   handleDisplayShows = (event) => {
+    // console.log(new Date(Date.parse(this.state.date)).getDate().toString())
     console.log(this.props);
     event.preventDefault();
     this.setState({ displayShows: true });
@@ -74,15 +75,23 @@ this.setState({spinner:true})
       .then(response => {
         // console.log(response.data);
         // movies(response.data);
-        this.setState({ shows: response.data,spinner:false });
+        var tempArray=[];
+        response.data.map((show, index) => {
+          var time=show.ShowTime.split(":");
+          // console.log(time)
+          var date = new Date (new Date(Date.parse(this.state.date)).setHours(time[0],time[1],time[2],0));
+          date>new Date()?(tempArray.push(show)):null;
+          
+        });
+        this.setState({shows:tempArray,spinner:false });
 
       })
       .catch(error => {
         console.log('error', error)
-        if (error) {
-          error.response.status == 400 ? alert("There are no shows for this date.") : null;
-          window.location.reload(true);
-        }
+        // if (error) {
+        //   error.response.status == 400 ? alert("There are no shows for this date.") : null;
+        //   window.location.reload(true);
+        // }
 
       })
     }
@@ -139,7 +148,7 @@ this.setState({spinner:true})
                   variant="contained"
                   color="secondary"
                   style={{width:510,marginTop:10,padding:'unset',fontSize:12}}
-                  disabled={new Date(Date.parse(this.state.date)).getDate()<(new Date().getDate())}
+                  disabled={new Date(Date.parse(this.state.date))<(new Date().setHours(0,0,0,0))}
                   onClick={this.handleDisplayShows} type="button" 
             >Display shows</Button>
                 </div>
@@ -151,7 +160,7 @@ this.setState({spinner:true})
             <select className="custom-select mb-2 mr-sm-2 mb-sm-0" name="selectedShow" onChange={this.handleChange}>
                         <option disabled selected value> -- select an option -- </option>
                         {this.state.shows.map((show, index) => (
-
+                            
                           // <option value={String(show.ShowID)}>{show.ShowTime}</option>
                           <option
                             value={String(show.ShowID)}

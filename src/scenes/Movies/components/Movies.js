@@ -17,6 +17,9 @@ import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import {withRouter} from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import MuiAlert from '@material-ui/lab/Alert';
 import CircularProgress from '@material-ui/core/CircularProgress';
 //Component imports
 import Auth from '../../../Auth';
@@ -28,7 +31,9 @@ class MovieComponent extends Component {
           open: false,
           ID: null,
           movies: [],
-          spinner:true
+          spinner:true,
+        snackbaropen :false, snackbarmsg:'',snackbaropen:false,
+
         };  
       }  
 
@@ -39,7 +44,7 @@ class MovieComponent extends Component {
       var tokenExpiration = new Date(decoded.exp*1000);
       var currentDate = new Date();
       if(currentDate>tokenExpiration){
-        alert("Your session has expired.");
+this.setState({snackbaropen:true , snackbartype:"warning",snackbarmsg : "Your session has expired."});
         Auth.logout(()=>{sessionStorage.clear();this.props.history.push('/')});
       }
       }
@@ -56,6 +61,11 @@ class MovieComponent extends Component {
             })
 
     }
+
+    snackbarClose = (e) =>{
+      this.setState({snackbaropen:false});
+    }
+
     handleOpen = ID => () => {
       // get which button was pressed via `stationNumber`
       // open the modal and set the `stationNumber` state to that argument
@@ -75,6 +85,25 @@ class MovieComponent extends Component {
         {this.state.spinner?(    <div className="spinner">
     <CircularProgress thickness="5" />
   </div>):null}
+  <Snackbar 
+  anchorOrigin={{vertical:'top',horizontal:'right'}}
+  open = {this.state.snackbaropen}
+  autoHideDuration = {6000}
+  onClose={this.snackbarClose}
+  message = {<span id="message-id">{this.state.snackbarmsg}</span>}
+  action ={[
+    <IconButton 
+    key="close"
+    arial-label="close"
+    color="#FFFFFF"
+    onClick={this.snackbarClose}>
+    </IconButton>
+  ]}
+  >
+          <MuiAlert elevation={6} variant="filled" onClose={this.state.snackbaropen} severity={this.state.snackbartype}>
+{this.state.snackbarmsg}
+</MuiAlert>
+</Snackbar>
         <Grid container spacing={4}>
     {this.state.movies.map((movie,index) => (
       <Grid item key={index} xs={7} sm={4} style = {{minWidth: "250px"}} >

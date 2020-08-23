@@ -9,6 +9,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import axios from 'axios';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import MuiAlert from '@material-ui/lab/Alert';
 import jwt_decode from 'jwt-decode';
 import { useHistory } from "react-router-dom";
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -66,13 +69,26 @@ const useStyles = makeStyles({
 export default function StickyHeadTable() {
 let history = useHistory();
 const [spinner, isLoading] = React.useState(true);
+const [snackbaropen, openSnackbar] = React.useState(false);
+const [snackbartype, setSnackbartype] = React.useState("");
+const [snackbarmsg, setSnackbarmsg] = React.useState("");
+
+
+const snackbarClose = (event, reason) => {
+  if (reason === 'clickaway') {
+    return;
+  }
+  openSnackbar(false);
+
+};
 
 if(Auth.isAuthenticated()){
   var decoded = jwt_decode(sessionStorage.getItem("token"));
   var tokenExpiration = new Date(decoded.exp*1000);
-  var currentDate = new Date();
+  var currentDate = new Date().getTime()*16*6000;
   if(currentDate>tokenExpiration){
-    alert("Your session has expired.");
+    debugger;
+    openSnackbar(true);
     Auth.logout(()=>{sessionStorage.clear();history.push('/')});
   }
   else{
@@ -115,6 +131,28 @@ if(Auth.isAuthenticated()){
       {spinner?(    <div className={classes.spinner}>
     <CircularProgress thickness="5" />
   </div>):null}
+  <Snackbar 
+  anchorOrigin={{vertical:'top',horizontal:'right'}}
+  open = {snackbaropen}
+  autoHideDuration = {6000}
+  onClose={snackbarClose}
+    
+    message = {<span id="message-id">Your session has expired.</span>}
+  action ={[
+    <React.Fragment>
+    <IconButton 
+    key="close"
+    arial-label="close"
+    color="#FFFFFF"
+    onClick={snackbarClose}>
+    </IconButton>
+    </React.Fragment>
+  ]}
+  >
+          <MuiAlert elevation={6} variant="filled" onClose={snackbaropen} severity="warning">
+  Your session has expired.
+</MuiAlert>
+</Snackbar>
       <TableContainer className={classes.container}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>

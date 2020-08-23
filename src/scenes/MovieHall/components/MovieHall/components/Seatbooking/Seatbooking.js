@@ -4,6 +4,9 @@ import {withRouter} from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import MuiAlert from '@material-ui/lab/Alert';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 //Component imports
@@ -20,7 +23,9 @@ class Seatbooking extends React.Component {
       seatReserved: [],
       confirmation: false,
       showSeatReservation:true,
-      spinner:true
+      spinner:true,
+      snackbaropen :false, snackbarmsg:'',snackbaropen:false,
+
 
     }
     console.log(this.props);
@@ -52,7 +57,9 @@ class Seatbooking extends React.Component {
        })
 
 }
-
+snackbarClose = (e) =>{
+  this.setState({snackbaropen:false});
+}
   onClickData(seat) {
     if(this.state.seatSelected.indexOf(seat) > -1 ) {
       this.setState({
@@ -137,14 +144,18 @@ class DrawGrid extends React.Component {
 
   if(json.status===200){  
 this.setState({spinner:false})
-
-    alert("Booking confirmed");  
-  this.props.parentProps.history.push("/movies");  
+this.setState({snackbaropen:true , snackbartype:"success",snackbarmsg : "Booking confirmed"});
+setTimeout(() => { 
+this.props.parentProps.history.push("/movies");  
+}, 2000)
+ 
   }  
   else{  
-  alert('Data not Saved');  
-  debugger;  
-  // this.props.history.push('/movies')  
+ this.setState({snackbaropen:true , snackbartype:"error",snackbarmsg : "Something went wrong. Please try again."});
+setTimeout(() => { 
+window.location.reload(true); 
+
+}, 3000);
   }  
   }) 
   }
@@ -166,6 +177,25 @@ handleChange(event) {
                {this.state.spinner?(    <div className="spinner">
     <CircularProgress thickness="5" />
   </div>):null}
+  <Snackbar 
+  anchorOrigin={{vertical:'top',horizontal:'right'}}
+  open = {this.state.snackbaropen}
+  autoHideDuration = {6000}
+  onClose={this.snackbarClose}
+  message = {<span id="message-id">{this.state.snackbarmsg}</span>}
+  action ={[
+    <IconButton 
+    key="close"
+    arial-label="close"
+    color="#FFFFFF"
+    onClick={this.snackbarClose}>
+    </IconButton>
+  ]}
+  >
+          <MuiAlert elevation={6} variant="filled" onClose={this.state.snackbaropen} severity={this.state.snackbartype}>
+{this.state.snackbarmsg}
+</MuiAlert>
+</Snackbar>
          {this.props.showSeatReservation?<div>
           <h1>Seat Reservation System</h1>
         <h2></h2>

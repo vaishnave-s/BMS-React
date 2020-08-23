@@ -127,7 +127,7 @@ else{
                     email: response.data.CustomerEmail,
                     number: contact,
                     address: address,
-                    accountCreateDate: Date(response.data.AccountCreateDate).toString().split('GMT')[0].substring(0, 15),
+                    accountCreateDate: Date(response.data.AccountCreateDate).toString().split('GMT')[0].substring(4, 15),
                     rollbackCustomer:response.data
                 });
                 this.setState({spinner:false})

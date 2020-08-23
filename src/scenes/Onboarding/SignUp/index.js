@@ -92,14 +92,12 @@ window.location.reload(true);
 
           }
           else{
-            // this.setState({snackbaropen:true , snackbarmsg : 'Enter a valid name.'});
-            alert('Enter a valid name.')
+            this.setState({snackbaropen:true ,snackbartype:"error", snackbarmsg : 'Enter a valid name.'});
           }
         }
         else
         {
-          // this.setState({snackbaropen:true , snackbarmsg : 'Enter a valid email.'});
-          alert('Enter a valid email.')
+          this.setState({snackbaropen:true ,snackbartype:"error",  snackbarmsg : 'Enter a valid email.'});
 
         }
       }
